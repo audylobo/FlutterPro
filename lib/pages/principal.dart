@@ -10,7 +10,7 @@ class Principal extends StatefulWidget{
    class  _PrincipalState extends State<Principal> {
      Drawer _getDrawer(BuildContext context)
      {
-       var header = new DrawerHeader(child: new Text("menu") );
+       var header = new DrawerHeader(child: new Text("Test") );
        var info = new AboutListTile(
          child: new Text("Acerca de"),
          applicationVersion: "v1.1.5",
