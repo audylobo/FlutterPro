@@ -1,6 +1,8 @@
 import 'package:drawer_menu/services/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:drawer_menu/registro.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 
 class LoginPage extends StatefulWidget {
   static const String routeName = "/LoginPage";
@@ -17,18 +19,18 @@ class _LoginPageState extends State<LoginPage> {
   String password = '';
   String error = '';
 
-  bool _showPassword = false;
+  bool _showPassword = true;
 
   // Form key
   final formkey = new GlobalKey<FormState>();
 
+  bool isLoading = false;
 
-  void loginWithCredentials() {
-    _authService.signEmailIn(email, password);
-  }
-
-  void loginWithProvider(String provider) {
-    _authService.signInWithProvider();
+  _onError(BuildContext context, dynamic error) {
+    setState(() {
+      isLoading = false;
+    });
+    Alert(context: context, title: "Error", desc: error.message).show();
   }
 
   @override
@@ -68,12 +70,24 @@ class _LoginPageState extends State<LoginPage> {
                       shape: BoxShape.rectangle,
                       borderRadius: BorderRadius.circular(20.0),
                     ),
-                    child: Column(
+                    child: 
+                    
+                    isLoading ?
+
+                    SpinKitCircle(
+                      color: Colors.blue,
+                      size: 100.0,
+                    )
+                    
+                    :
+
+                    Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: <Widget>[
                         TextFormField(
                           autocorrect: false,
                           autofocus: false,
+                          keyboardType: TextInputType.emailAddress,
                           onChanged: (value) {
                             setState(() => email = value);
                           },
@@ -136,7 +150,12 @@ class _LoginPageState extends State<LoginPage> {
                           textColor: Colors.white,
                           child: Text('Entrar'),
                           onPressed: () {
-                            loginWithCredentials();
+                            setState(() {
+                              isLoading = true;
+                            });
+                            _authService.signEmailIn(email, password).catchError(
+                              (error) => _onError(context, error)
+                            );
                           },
                         ),
                         SizedBox(
@@ -148,7 +167,13 @@ class _LoginPageState extends State<LoginPage> {
                           textColor: Colors.white,
                           child: Text('Entrar con Google'),
                           onPressed: () {
-                            loginWithProvider('google');
+                            setState(() {
+                              isLoading = true;
+                            });
+                            _authService.signInWithGoogle()
+                            .catchError(
+                              (error) => _onError(context, error)
+                            );
                           },
                         ),
                         MaterialButton(
@@ -157,7 +182,9 @@ class _LoginPageState extends State<LoginPage> {
                           textColor: Colors.white,
                           child: Text('Entrar con Facebook'),
                           onPressed: () {
-                            loginWithProvider('facebook');
+                            _authService.signInWithFacebook().catchError(
+                              (error) => _onError(context, error)
+                            );
                           },
                         ),
                         SizedBox(height: 20.0,),

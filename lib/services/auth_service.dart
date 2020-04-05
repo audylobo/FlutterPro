@@ -1,19 +1,31 @@
 import 'package:drawer_menu/models/user_model.dart';
+import 'package:drawer_menu/validators.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-
 import 'database_service.dart';
+
+class RegisterData {
+
+  String name;
+  String lastName;
+  String email;
+  String password;
+  String confirmPassword;
+  String phone;
+
+  RegisterData({this.lastName, this.password, this.confirmPassword, this.phone, this.name, this.email});
+}
 
 class AuthService {
   
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn();
-
-  String _name = '';
+  final FacebookLogin facebookSignIn = FacebookLogin();
 
   // Create user object
   User _userFromFirebaseUser(FirebaseUser user){    
-    return user != null ? User(uid: user.uid, email: user.email , name: user.displayName, picture: user.photoUrl) : null;
+    return user != null ? User(uid: user.uid , email: user.email , name: user.displayName, picture: user.photoUrl) : null;
   }
 
   // Auth change user stream
@@ -23,80 +35,102 @@ class AuthService {
   }
 
   // Sign in email/password
-  Future signEmailIn(String email, String password) async {
+  Future<User> signEmailIn(String email, String password) async {
+    AuthResult result = await _auth.signInWithEmailAndPassword(email: email, password: password);      
+    FirebaseUser user = result.user;
+
+    print('signed in OK');
+    return _userFromFirebaseUser(user); 
+  }
+
+  Future<User> signInWithGoogle() async {
+    // CERTIFICADO: 4F:BB:A2:5E:C0:5D:80:A1:53:5D:EF:E6:74:81:4B:EE:A8:08:D9:B1
+    final googleUser = await _googleSignIn.signIn();
+    final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+
+    final AuthCredential credential = GoogleAuthProvider.getCredential(
+      accessToken: googleAuth.accessToken,
+      idToken: googleAuth.idToken,
+    );
+
+    final FirebaseUser user = (await _auth.signInWithCredential(credential)).user;
+
+    // Get user data if exists
+    var userData = await DatabaseService(user.uid).getUserData()
+      .then((document) => document);
+
+    if (!userData.exists) {
+      // Create data on new user
+      await DatabaseService(user.uid).updateUserData('usuario', '');
+    } else {
+      // Set data to operate (userData.data)
+
+    }
+    print('signed in OK');
+
+    return _userFromFirebaseUser(user);
+  }
+
+  Future<User> signInWithFacebook() async {
+    // CERTIFICADO: T7uiXsBdgKFTXe/mdIFL7qgI2bE= 
+    final FacebookLoginResult facebookLoginResult = await facebookSignIn.logIn(['email', 'public_profile']);
+    FacebookAccessToken facebookAccessToken = facebookLoginResult.accessToken;
+    AuthCredential authCredential = FacebookAuthProvider.getCredential(accessToken: facebookAccessToken.token);
     
-    try {
-      AuthResult result = await _auth.signInWithEmailAndPassword(email: email, password: password);      
-      FirebaseUser user = result.user;
+    FirebaseUser user = (await _auth.signInWithCredential(authCredential)).user;
 
-      //Obtain real name - TODO
+    // Get user data if exists
+    var userData = await DatabaseService(user.uid).getUserData()
+      .then((document) => document);
 
-      print('signed in OK');
-      return _userFromFirebaseUser(user);
-
-    } catch (e) {
-
-      print('Sign in error: ' + e.toString());
-      return null;
-    }    
-  }
-
-  Future signInWithProvider() async {
-    try {
-      var result = await _googleSignIn.signIn();
-      print(result);
-    } catch (e) {
+    if (!userData.exists) {
+      // Create data on new user
+      await DatabaseService(user.uid).updateUserData('usuario', '');
+    } else {
+      // Set data to operate (userData.data)
 
     }
-  }
-
-  // Register email/password
-  Future signUpEmail(String email, String password, String name) async {
-
-    try {
-      
-      AuthResult result = await _auth.createUserWithEmailAndPassword(email: email, password: password );
-      FirebaseUser user = result.user;
-      
-      // Create user real name
-      await DatabaseService(uid: user.uid).updateUserData(name);     
-      _name = name; 
-
-      print('signed up OK');
-      return _userFromFirebaseUser(user);
-
-    } catch (e) {
-      print('Sign Up error: ' + e.toString());
-      return null;
-    }
-
-  }
-
-  Future<bool> forgotPwEmail(String email) async{
     
-    try {
+    print('signed in OK');
+    return _userFromFirebaseUser(user);
+  }
 
-      await _auth.sendPasswordResetEmail(email: email); 
-      
-      return true;
+  // Register with email and password
+  Future<User> signUpEmail(RegisterData registerData) async {
 
-    } catch (e) {
-      print('Forgot PW error: ' + e.toString());
-      return false;
-    }
+    AuthResult result = await _auth.createUserWithEmailAndPassword(email: registerData.email, password: registerData.password );
+    FirebaseUser user = result.user;
+    
+    // Update user name info    
+    UserUpdateInfo info = UserUpdateInfo();
+    info.displayName = '${registerData.name} ${registerData.lastName}';
 
+    // Save updated info
+    await user.updateProfile(info);
+
+    // Create user info (rol, phone) on firestore
+    await DatabaseService(user.uid).updateUserData('usuario', registerData.phone);
+    return _userFromFirebaseUser(user);
   }
 
   // Sign out
   Future singOut() async {
-
-    try {
-      print('Sign out OK');
-      return await _auth.signOut();
+    try {      
+      // If google is signed in
+      var google = await _googleSignIn.isSignedIn();
+      if (google) {
+        _googleSignIn.signOut();
+      }
+      // If facebook is signed in
+      var facebook = await facebookSignIn.isLoggedIn;
+      if (facebook) {
+        facebookSignIn.logOut();
+      }
+      // Firebase Auth sign out      
+      await _auth.signOut();
     } catch (e) {
       print('Sign out error: ' + e.toString());
     }
-
   }
 
 }

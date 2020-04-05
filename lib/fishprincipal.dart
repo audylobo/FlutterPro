@@ -6,7 +6,6 @@ import 'package:drawer_menu/menu/lagos.dart';
 import 'package:drawer_menu/menu/sensor.dart';
 import 'package:drawer_menu/menu/settings.dart';
 import 'package:drawer_menu/pages/fishes/fishP.dart';
-import 'package:drawer_menu/pages/login_page.dart';
 import 'package:provider/provider.dart';
 
 class FishPrincipal extends StatefulWidget {
@@ -29,15 +28,15 @@ class _FishPrincipalState extends State<FishPrincipal>
 
     // User Picture
     var userPicture = user.picture != null ? 
-      NetworkImage(user.picture) 
+      CircleAvatar(backgroundImage: NetworkImage(user.picture),)
       :
-      Icon(FontAwesomeIcons.user, color: Colors.blue);
+      CircleAvatar(child: Icon(FontAwesomeIcons.user, color: Colors.white70), foregroundColor: Colors.white,) ;
 
     // Drawer Header
     var header = DrawerHeader(
       padding: EdgeInsets.all(0.0),
-      child: UserAccountsDrawerHeader(
-        currentAccountPicture: CircleAvatar(child: userPicture, backgroundColor: Colors.white,),
+      child: UserAccountsDrawerHeader(        
+        currentAccountPicture: userPicture,
         accountEmail: Text(user.email),
         accountName: Text(userName),
     ));
@@ -74,7 +73,8 @@ class _FishPrincipalState extends State<FishPrincipal>
           header,
           _getItem(new Icon(FontAwesomeIcons.bars), 'Reporte', "/report"),
           _getItem(new Icon(Icons.live_help), 'Ayuda', "/ayuda"),
-          _getItem(new Icon(Icons.exit_to_app), 'Cerrar sesión', "cerrar"),
+          Divider(),
+          _getItem(new Icon(Icons.exit_to_app), 'Cerrar sesión', "cerrar"),          
           info
     ]));
   }

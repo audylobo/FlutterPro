@@ -18,15 +18,15 @@ class MyApp extends StatelessWidget {
     return StreamProvider<User>.value(
       value: AuthService().user,
       child: MaterialApp(
-            title: 'Peces App',
-            debugShowCheckedModeBanner: false,
-            home: Wrapper(),
-            routes: <String, WidgetBuilder>  {        
-              Report.routeName:  (BuildContext context) => new Report(),
-              Help.routeName:  (BuildContext context) => new Help(),
-              FishPrincipal.routeName: (BuildContext context) => new FishPrincipal(),
-              Fishp.routeName: (BuildContext context) => new Fishp(),
-              LoginPage.routeName: (BuildContext context) => LoginPage(),
+        title: 'Peces App',
+        debugShowCheckedModeBanner: false,
+        home: Wrapper(),
+        routes: <String, WidgetBuilder>  {        
+          Report.routeName:  (BuildContext context) => new Report(),
+          Help.routeName:  (BuildContext context) => new Help(),
+          FishPrincipal.routeName: (BuildContext context) => new FishPrincipal(),
+          Fishp.routeName: (BuildContext context) => new Fishp(),
+          LoginPage.routeName: (BuildContext context) => LoginPage(),
         }  
       ),
     );

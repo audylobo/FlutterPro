@@ -2,39 +2,23 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class DatabaseService{
 
+  // Instance with user id
   final String uid;
-  DatabaseService({this.uid});
-  // Collection reference
-  final CollectionReference entitiesCollection = Firestore.instance.collection('entities');
-  final CollectionReference userDataCollection = Firestore.instance.collection('userdata');
-  final CollectionReference newsCollection = Firestore.instance.collection('news');
+  DatabaseService(this.uid);
 
-  Future updateUserData(String name) async{
+  // Collections reference
+  final CollectionReference userDataCollection = Firestore.instance.collection('users');
+  final CollectionReference fishDataCollection = Firestore.instance.collection('fish');
 
-    return await userDataCollection.document(uid).setData({
-      'name' : name,
+  Future updateUserData(String rol, String phone) async{
+    await userDataCollection.document(uid).setData({
+      'rol' : rol,
+      'phone' : phone,
       'registration_date' : DateTime.now()
     });
   }
 
-  Future getUserData(String uid) async {
-
-    //return await userDataCollection.document(uid).('name');
-
+  Future<DocumentSnapshot> getUserData() async {
+    return await userDataCollection.document(uid).get();
   }
-
-
-  //Entities
-
-  Future createNewEntity(){
-
-
-  }
-
-  Future updateEntity(){
-
-  }
-
-
-
 }
