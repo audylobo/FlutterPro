@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:drawer_menu/models/fish_model.dart';
 import 'package:drawer_menu/services/database_service.dart';
 import 'package:flutter/material.dart';
@@ -7,10 +5,17 @@ import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart' as p;
 
 class FishAdd extends StatefulWidget {
-  final String fishId;
+  final String fishCategory;
   final bool isEditing;
   final Map<String, dynamic> fishData;
-  FishAdd({Key key, this.fishId, this.isEditing, this.fishData}) : super(key: key);
+  final String documentId;
+  FishAdd(
+      {Key key,
+      this.fishCategory,
+      this.isEditing,
+      this.fishData,
+      this.documentId})
+      : super(key: key);
 
   @override
   _FishAddState createState() => _FishAddState();
@@ -42,23 +47,66 @@ class _FishAddState extends State<FishAdd> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    fishModel.nombreEspecie = widget.fishId;
+  void initState() { 
+    super.initState();
+    if (widget.isEditing) {
+      setState(() {
+        fishModel = new DetailFishModel(
+            continente: widget.fishData['continente'],
+            descripcion: widget.fishData['descripcion'],
+            nombrePez: widget.fishData['nombrePez'],
+            nombreCientifico: widget.fishData['nombreCientifico'],
+            nombreEspecie: widget.fishCategory,
+            img: widget.fishData['img'],
+            detalle: new Detalle(
+                pesoMax: widget.fishData['detalle']['pesoMax'],
+                edadMax: widget.fishData['detalle']['edadMax']),
+            estiloVida: new EstiloVida(
+                phMax: widget.fishData['estiloVida']['phMax'],
+                phMin: widget.fishData['estiloVida']['phMin'],
+                tempMax: widget.fishData['estiloVida']['tempMax'],
+                tempMin: widget.fishData['estiloVida']['tempMin']),
+            mediciones: new Mediciones(
+                tamanoMax: widget.fishData['mediciones']['tamanoMax'],
+                tamanoMin: widget.fishData['mediciones']['tamanoMin']));
+      });
+    }
+  }
 
+  @override
+  Widget build(BuildContext context) {
+    setState(() {
+      fishModel.nombreEspecie = widget.fishCategory;
+    });
+
+    
     return Scaffold(
       appBar: AppBar(
-        title: widget.isEditing ? Text('Editar ' + widget.fishData['nombrePez']): Text('Agregar nuevo ' + widget.fishId),
+        title: widget.isEditing
+            ? Text('Editar ' + widget.fishData['nombrePez'])
+            : Text('Agregar nuevo ' + widget.fishCategory),
         actions: <Widget>[
           IconButton(
               icon: Icon(Icons.save),
               onPressed: () {
-                DatabaseService(null)
-                    .createNewFish(widget.fishId, fishModel)
-                    .then((onValue) {
-                  Navigator.pop(context);
-                }).catchError((error) {
-                  print(error);
-                });
+                if (widget.isEditing) {
+                  //On editing fish
+                  DatabaseService(null)
+                      .editFish(
+                          widget.fishCategory, widget.documentId, fishModel)
+                      .then((onValue) {
+                    Navigator.pop(context);
+                  }).catchError((error) => print(error));
+                } else {
+                  // On new fish
+                  DatabaseService(null)
+                      .createNewFish(widget.fishCategory, fishModel)
+                      .then((onValue) {
+                    Navigator.pop(context);
+                  }).catchError((error) {
+                    print(error);
+                  });
+                }
               }),
           SizedBox(
             width: 10.0,
@@ -72,7 +120,7 @@ class _FishAddState extends State<FishAdd> {
             Text(' - Información general'),
             TextFormField(
               autofocus: true,
-              initialValue: fishModel.nombrePez,
+              initialValue: widget.isEditing ? widget.fishData['nombrePez'] : fishModel.nombrePez,
               decoration: InputDecoration(
                 labelText: 'Nombre del pez',
               ),
@@ -115,23 +163,19 @@ class _FishAddState extends State<FishAdd> {
                 });
               },
             ),
+            SizedBox(
+              height: 20.0,
+            ),
             Row(children: [
               Expanded(
-                flex: 3,
-                child: TextFormField(
-                  controller: TextEditingController()..text = fishModel.img,
-                  onChanged: (value) {
-                    setState(() {
-                      fishModel.img = value;
-                    });
-                  },
-                  decoration: InputDecoration(
-                    labelText: 'Imagen url',
-                  ),
-                ),
-              ),
+                  flex: 1,
+                  child: fishModel.img.length > 0
+                      ? ClipRRect(
+                          borderRadius: BorderRadius.circular(50.0),
+                          child: Image.network(fishModel.img))
+                      : Text('No se encontro una imagen')),
               SizedBox(
-                width: 30.0,
+                width: 10.0,
               ),
               Expanded(
                   child: RaisedButton(
@@ -141,6 +185,17 @@ class _FishAddState extends State<FishAdd> {
                 onPressed: getImage,
               ))
             ]),
+            TextFormField(
+              controller: TextEditingController()..text = fishModel.img,
+              onChanged: (value) {
+                setState(() {
+                  fishModel.img = value;
+                });
+              },
+              decoration: InputDecoration(
+                labelText: 'Imagen url',
+              ),
+            ),
             Padding(
               padding: EdgeInsets.only(top: 30.0),
               child: Text(' - Detalle'),

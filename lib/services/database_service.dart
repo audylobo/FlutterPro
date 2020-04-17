@@ -14,7 +14,6 @@ class DatabaseService{
   final CollectionReference fishDataCollection = Firestore.instance.collection('fish');
 
   //User
-
   Future updateUserData(String rol, String phone, String email) async{
     await userDataCollection.document(uid).setData({
       'rol' : rol,
@@ -34,16 +33,31 @@ class DatabaseService{
       .map((snapshot) => snapshot.documents.map((doc) => FishModel(documentID: doc.documentID, data: doc.data)).toList());
   }
 
-  Future<List> getFishList(String category) {
+  // Get fish list by categories
+  Future<List<DocumentSnapshot>> getFishList(String category) {
     return fishDataCollection.document(category).collection('Content').getDocuments()
-      .then((snapshot) => snapshot.documents.map((doc) => doc.data).toList());
+      .then((snapshot) => snapshot.documents);
   }
 
+  // Create new fish in selected category
   Future createNewFish(String category, DetailFishModel fishData) {
-    print(fishData.toMap());
     return fishDataCollection.document(category).collection('Content').document().setData(fishData.toMap());
   }
 
+  // Edit existent fish in selected category
+  Future editFish(String category, String fishDocumentId, DetailFishModel fishData) {
+    return fishDataCollection.document(category).collection('Content').document(fishDocumentId).setData(fishData.toMap());
+  }
+
+  // Delete fish by category and document id
+  Future deleteFish(String category, String fishDocumentId) {
+    return fishDataCollection.document(category).collection('Content').document(fishDocumentId).delete();
+  }
+
+  // Filter fish data
+
+
+  // upload file image to firebase storage
   Future<String> uploadImage(File file, String fileName) async{
     // Create storage reference
     StorageReference storageReference;

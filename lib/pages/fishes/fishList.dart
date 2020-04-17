@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:drawer_menu/models/fish_model.dart';
 import 'package:drawer_menu/pages/fishes/fishAdd.dart';
 import 'package:drawer_menu/pages/fishes/fishDetails.dart';
@@ -14,7 +15,6 @@ class FishList extends StatefulWidget {
 }
 
 class _FishListState extends State<FishList> {
-  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,13 +27,15 @@ class _FishListState extends State<FishList> {
             Navigator.push(
                 context,
                 new MaterialPageRoute(
-                    builder: (context) =>
-                        new FishAdd(fishId: widget.fishData.documentID, isEditing: false,)));
+                    builder: (context) => new FishAdd(
+                          fishCategory: widget.fishData.documentID,
+                          isEditing: false,
+                        )));
           }),
       body: FutureBuilder(
         future: DatabaseService(null).getFishList(widget.fishData.documentID),
-        initialData: [],
-        builder: (BuildContext context, AsyncSnapshot<List> snapshot) {
+        initialData: new List<DocumentSnapshot>(),
+        builder: (BuildContext context, AsyncSnapshot<List<DocumentSnapshot>> snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             if (snapshot.data.length == 0) {
               return Center(
@@ -53,14 +55,14 @@ class _FishListState extends State<FishList> {
                   Text('No se encontraron resultados')
                 ],
               ));
+            } else {
+              return ListView.builder(
+                itemCount: snapshot.data.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return fishTile(snapshot.data[index].data, snapshot.data[index].documentID);
+                },
+              );
             }
-
-            return ListView.builder(
-              itemCount: snapshot.data.length,
-              itemBuilder: (BuildContext context, int index) {
-                return fishTile(snapshot.data[index]);
-              },
-            );
           } else {
             return Center(
                 child: SpinKitCircle(
@@ -72,7 +74,7 @@ class _FishListState extends State<FishList> {
     );
   }
 
-  Widget fishTile(Map<String, dynamic> fishData) {
+  Widget fishTile(Map<String, dynamic> fishData, String documentId) {
     final GlobalKey _menuKey = new GlobalKey();
 
     final menuButton = new PopupMenuButton(
@@ -87,10 +89,22 @@ class _FishListState extends State<FishList> {
           switch (value) {
             case 'edit':
               Navigator.push(
-                context,
-                new MaterialPageRoute(
-                    builder: (context) =>
-                        new FishAdd(fishId: widget.fishData.documentID, isEditing: true, fishData: fishData,)));
+                  context,
+                  new MaterialPageRoute(
+                      builder: (context) => new FishAdd(
+                            fishCategory: widget.fishData.documentID,
+                            isEditing: true,
+                            fishData: fishData,
+                            documentId: documentId,
+                          )));
+              break;
+            case 'delete':
+              DatabaseService(null)
+                  .deleteFish(widget.fishData.documentID, documentId)
+                  .then((value) {
+                    print(documentId + ' Deleted');
+                    (context as Element).reassemble();
+                  });
               break;
             default:
           }
