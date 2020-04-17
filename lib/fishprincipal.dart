@@ -1,5 +1,6 @@
 import 'package:drawer_menu/models/user_model.dart';
 import 'package:drawer_menu/services/auth_service.dart';
+import 'package:drawer_menu/services/database_service.dart';
 import 'package:flutter/material.dart';
 import 'package:drawer_menu/font_awesome_flutter.dart';
 import 'package:drawer_menu/menu/lagos.dart';
@@ -18,9 +19,8 @@ class _FishPrincipalState extends State<FishPrincipal>
     with SingleTickerProviderStateMixin {
   AuthService _authService = AuthService();
 
-  Drawer _getDrawer(BuildContext context) {
+  Drawer _getDrawer(BuildContext context, User user) {
     // User context
-    final user = Provider.of<User>(context);
 
     // User displayName
     var userName = user.name != null ? user.name : 'Usuario';
@@ -82,6 +82,8 @@ class _FishPrincipalState extends State<FishPrincipal>
   }
 
   TabController _tabController;
+  var user;
+  var userRol;
 
   @override
   void initState() {
@@ -91,6 +93,13 @@ class _FishPrincipalState extends State<FishPrincipal>
 
   @override
   Widget build(BuildContext context) {
+    final user = Provider.of<User>(context);
+    DatabaseService(user.uid).getUserData().then((document) {
+      setState(() {
+        userRol = document.data['rol'].toString();
+      });
+    });
+
     return new Scaffold(
       appBar: new AppBar(
         title: Text("Uribe Paraco"),
@@ -105,26 +114,20 @@ class _FishPrincipalState extends State<FishPrincipal>
             },
           ),
         ],
-        bottom: new TabBar(
-          controller: _tabController,
-          tabs: <Widget>[
-            new Tab(icon: new Icon(FontAwesomeIcons.tint)),
-            new Tab(icon: new Icon(FontAwesomeIcons.fish)),
-            new Tab(icon: new Icon(Icons.speaker_phone)),
-            new Tab(icon: new Icon(Icons.settings))
-          ],
-        ),
+        bottom: new TabBar(controller: _tabController, tabs: <Widget>[
+          new Tab(icon: new Icon(FontAwesomeIcons.tint)),
+          new Tab(icon: new Icon(FontAwesomeIcons.fish)),
+          new Tab(icon: new Icon(Icons.speaker_phone)),
+          new Tab(icon: new Icon(Icons.settings))
+        ]),
       ),
-      drawer: _getDrawer(context),
-      body: new TabBarView(
-        controller: _tabController,
-        children: <Widget>[
-          new Lagos(),
-          new Fishp(),
-          new Sensor(),
-          new Settings(),
-        ],
-      ),
+      drawer: _getDrawer(context, user),
+      body: new TabBarView(controller: _tabController, children: <Widget>[
+        new Lagos(),
+        new Fishp(),
+        new Sensor(),
+        new Settings(),
+      ]),
     );
   }
 }
@@ -166,11 +169,10 @@ class CustomSearchDelegate extends SearchDelegate {
         ],
       );
     }
-    
-    //Add the search term to the searchBloc. 
+
+    //Add the search term to the searchBloc.
     //The Bloc will then handle the searching and add the results to the searchResults stream.
     //This is the equivalent of submitting the search term to whatever search service you are using
-    
 
     return Column(
       children: <Widget>[
@@ -214,7 +216,7 @@ class CustomSearchDelegate extends SearchDelegate {
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    // This method is called everytime the search term changes. 
+    // This method is called everytime the search term changes.
     // If you want to add search suggestions as the user enters their search term, this is the place to do that.
     return Column();
   }

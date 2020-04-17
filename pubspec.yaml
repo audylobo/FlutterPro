@@ -1,7 +1,5 @@
 name: drawer_menu
-description: A new Flutter project.
-
-
+description: Aplicación de peces.
 version: 1.0.0+1
 
 environment:
@@ -10,7 +8,6 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
 
   cupertino_icons: ^0.1.2
   carousel_slider: ^1.3.0
@@ -26,6 +23,7 @@ dependencies:
   rflutter_alert: ^1.0.3
   image_picker: ^0.6.5
   firebase_storage: ^3.1.5
+  flutter_launcher_icons: "^0.7.3"
 
 dev_dependencies:
   flutter_test:
@@ -34,8 +32,8 @@ dev_dependencies:
 flutter_launcher_icons: ^0.7.4
 
 flutter_icons:
-  image_path: "assets/images/icono-app.png"
-  android: true 
+  image_path: "assets/images/Pez.png"
+  android: "launcher_icon"
   ios: true
   
 flutter:
@@ -43,7 +41,5 @@ flutter:
 
   assets:
     - assets/images/Pez.png
-    - assets/images/Amarillo.png
-    - assets/images/2Amarillo.png
     - assets/images/p.jpg
     - assets/images/fish-loading.gif
