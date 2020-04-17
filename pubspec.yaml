@@ -24,6 +24,8 @@ dependencies:
   flutter_hide_show_password_input: ^0.0.1  
   flutter_spinkit: "^4.1.2"
   rflutter_alert: ^1.0.3
+  image_picker: ^0.6.5
+  firebase_storage: ^3.1.5
 
 dev_dependencies:
   flutter_test:
@@ -40,71 +42,8 @@ flutter:
   uses-material-design: true
 
   assets:
-    - assets/images/Arawanas.png
-    - assets/images/Arawana_africana.png
-    - assets/images/Arawana_australiana.png
-    - assets/images/Arawana_comun.png
-    - assets/images/Arawana_negra.png
-    - assets/images/Arrawana_Albina.png
-    - assets/images/Bagres.png
-    - assets/images/Bagre_charruzco.png
-    - assets/images/Bagre_marmoleado.png
-    - assets/images/Bagre_negro.png
-    - assets/images/Bagre_pobre.png
-    - assets/images/Bagre_rayado.png
-    - assets/images/Bagre_sierra.png
-    - assets/images/Bagre_zamurito.png
-    - assets/images/Cachama_blanca.png
-    - assets/images/Cachama_comun.png
-    - assets/images/Cachama_negra.png
-    - assets/images/Cachamas.png
-    - assets/images/Corocoro.png
-    - assets/images/Corroncho.png
-    - assets/images/Dorados.png
-    - assets/images/Dorado_abanico.png
-    - assets/images/Dorado_carpin.png
-    - assets/images/Dorado_celestial.png
-    - assets/images/Dorado_cometa.png
-    - assets/images/Dorado_comun.png
-    - assets/images/Dorado_oranda.png
-    - assets/images/Dorado_perla.png
-    - assets/images/Dorado_phoenix.png
-    - assets/images/Dorado_pompom.png
-    - assets/images/Dorado_ranchu.png
-    - assets/images/Dorado_ryukin.png
-    - assets/images/Dorado_telescopio.png
-    - assets/images/Dorado_velo.png
-    - assets/images/Dorado.png
-    - assets/images/Leporino.png
-    - assets/images/Mojarras.png
-    - assets/images/Mojarra_albina.png
-    - assets/images/Mojarra_tira.png
-    - assets/images/Oscars.png
-    - assets/images/Oscar_comun.png
-    - assets/images/Oscar_albino.png
-    - assets/images/Oscar_negro.png
-    - assets/images/Oscar_rojo.png
-    - assets/images/Pirarocu.png
-    - assets/images/Rollizo.png
-    - assets/images/Sabaleta.png
-    - assets/images/Sabalo.png
-    - assets/images/Sapoara.png
-    - assets/images/Sardinata.png
-    - assets/images/Tilapias.png
-    - assets/images/Tilapia.png
-    - assets/images/Tilapia_azul.png
-    - assets/images/Tilapia_nilo.png
-    - assets/images/Tilapia_roja.png
-    - assets/images/tilapia.png
-    - assets/images/Tucunape.png
-    - assets/images/Tucunape_azul.png
-    - assets/images/Tucunapes.png
-    - assets/images/Yamu.png
     - assets/images/Pez.png
-    - assets/images/Dorado.png
     - assets/images/Amarillo.png
-    - assets/images/bobachico.png
     - assets/images/2Amarillo.png
-    - assets/images/tilapia.png
-    - assets/images/Otros.png
     - assets/images/p.jpg
+    - assets/images/fish-loading.gif

@@ -1,4 +1,5 @@
 import 'package:drawer_menu/wraper.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:drawer_menu/models/user_model.dart';
@@ -18,6 +19,7 @@ class MyApp extends StatelessWidget {
     return StreamProvider<User>.value(
       value: AuthService().user,
       child: MaterialApp(
+        localizationsDelegates: [CustomLocalizationDelegate()],
         title: 'Peces App',
         debugShowCheckedModeBanner: false,
         home: Wrapper(),
@@ -31,4 +33,28 @@ class MyApp extends StatelessWidget {
       ),
     );
   }
+}
+
+
+class CustomLocalizationDelegate extends LocalizationsDelegate<MaterialLocalizations> {
+  const CustomLocalizationDelegate();
+
+  @override
+  bool isSupported(Locale locale) => locale.languageCode == 'en';
+
+  @override
+  Future<MaterialLocalizations> load(Locale locale) => SynchronousFuture<MaterialLocalizations>(const CustomLocalization());
+
+  @override
+  bool shouldReload(CustomLocalizationDelegate old) => false;
+
+  @override
+  String toString() => 'CustomLocalization.delegate(en_US)';
+}
+
+class CustomLocalization extends DefaultMaterialLocalizations {
+  const CustomLocalization();
+
+  @override
+  String get searchFieldLabel => "Buscar peces";
 }

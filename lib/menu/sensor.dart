@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:drawer_menu/menu/sensores/sensorA.dart';
-import 'package:drawer_menu/pages/fishes/fishDorado/Dorado.dart';
 
 class Sensor extends StatelessWidget{
   static const String routeName = "/sensores";
@@ -98,9 +97,6 @@ class Sensor extends StatelessWidget{
           ),
             padding: EdgeInsets.only( right: 35,top:20,),
             onPressed:(){
-              Navigator.push(
-                context,
-              new MaterialPageRoute(builder: (context) => new Dorados()));
             },
             ),
             
@@ -132,9 +128,6 @@ class Sensor extends StatelessWidget{
           ),
             padding: EdgeInsets.only(right: 20, top:20,),
             onPressed:(){
-              Navigator.push(
-                context,
-              new MaterialPageRoute(builder: (context) => new Dorados()));
             },
             ),
             
@@ -166,9 +159,7 @@ class Sensor extends StatelessWidget{
           ),
             padding: EdgeInsets.only(right:35, top:20),
             onPressed:(){
-              Navigator.push(
-                context,
-              new MaterialPageRoute(builder: (context) => new Dorados()));
+              
             },
             ),
             

@@ -1,6 +1,7 @@
 import 'package:drawer_menu/services/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 
 class Registro extends StatefulWidget {
   static const String routeName = "/registro";
@@ -212,16 +213,20 @@ class _RegistroState extends State<Registro> {
                       child: Text("ENVIAR DATOS"),
                       color: Colors.green,
                       textColor: Colors.white,
-                      onPressed: () {
+                      onPressed: () {                        
                         if (_formkey.currentState.validate()) {
                           setState(() {
                             isLoading = true;
-                          });
+                          });                          
                           _authService
                               .signUpEmail(user)
-                              .then((onValue) => {Navigator.pop(context)})
+                              .then((onValue) =>                                 
+                                Alert(context: context, type: AlertType.success, title: "Cuenta creada con exito", buttons: [DialogButton(child: Text('Ok'), onPressed: () {Navigator.pop(context);})]).show()
+                              )
                               .catchError(
-                                  (error) => setState(() => isLoading = false));
+                                  (error) => 
+                                    Alert(context: context,  type: AlertType.error, title: "Error", desc: _authService.authErrorHandling(error)).show().then((onValue) => setState(() => isLoading = false)) 
+                                  );
                         }
                       })
                 ]),

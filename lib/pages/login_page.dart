@@ -30,7 +30,8 @@ class _LoginPageState extends State<LoginPage> {
     setState(() {
       isLoading = false;
     });
-    Alert(context: context, title: "Error", desc: error.message).show();
+    print(error.code);
+    Alert(context: context, title: "Error", desc: _authService.authErrorHandling(error)).show();
   }
 
   @override

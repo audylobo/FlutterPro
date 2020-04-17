@@ -61,7 +61,7 @@ class AuthService {
 
     if (!userData.exists) {
       // Create data on new user
-      await DatabaseService(user.uid).updateUserData('usuario', '');
+      await DatabaseService(user.uid).updateUserData('usuario', '', user.email);
     } else {
       // Set data to operate (userData.data)
 
@@ -85,7 +85,7 @@ class AuthService {
 
     if (!userData.exists) {
       // Create data on new user
-      await DatabaseService(user.uid).updateUserData('usuario', '');
+      await DatabaseService(user.uid).updateUserData('usuario', '', user.email);
     } else {
       // Set data to operate (userData.data)
 
@@ -96,7 +96,7 @@ class AuthService {
   }
 
   // Register with email and password
-  Future<User> signUpEmail(RegisterData registerData) async {
+  Future signUpEmail(RegisterData registerData) async {
 
     AuthResult result = await _auth.createUserWithEmailAndPassword(email: registerData.email, password: registerData.password );
     FirebaseUser user = result.user;
@@ -109,8 +109,9 @@ class AuthService {
     await user.updateProfile(info);
 
     // Create user info (rol, phone) on firestore
-    await DatabaseService(user.uid).updateUserData('usuario', registerData.phone);
-    return _userFromFirebaseUser(user);
+    await DatabaseService(user.uid).updateUserData('usuario', registerData.phone, registerData.email);
+
+    _auth.signOut();
   }
 
   // Sign out
@@ -133,4 +134,34 @@ class AuthService {
     }
   }
 
+
+  String authErrorHandling(error) {
+
+    String errorMessage;
+
+    switch (error.code) {
+      case "ERROR_INVALID_EMAIL":
+        errorMessage = "El email no tiene un formato valido.";
+        break;
+      case "ERROR_WRONG_PASSWORD":
+        errorMessage = "Contraseña incorrecta.";
+        break;
+      case "ERROR_USER_NOT_FOUND":
+        errorMessage = "Usuario no encontrado.";
+        break;
+      case "ERROR_USER_DISABLED":
+        errorMessage = "Usuario deshabilitado.";
+        break;
+      case "ERROR_TOO_MANY_REQUESTS":
+        errorMessage = "Demasiadas peticiones realizadas. espere un momento para volver a realizar la peticion.";
+        break;
+      case "ERROR_EMAIL_ALREADY_IN_USE":
+        errorMessage = "El email ya esta en uso.";
+        break;
+      default:
+        errorMessage = "Ha occurido un error no definido.";
+    }
+
+    return errorMessage;
+  }
 }
