@@ -31,6 +31,7 @@ class _HomeState extends State<Home> {
       ),
       body: SafeArea(
         child: SearchBar<Map<String,dynamic>>(
+          minimumChars: 1,
           searchBarPadding: EdgeInsets.symmetric(horizontal: 10),
           headerPadding: EdgeInsets.symmetric(horizontal: 10),
           listPadding: EdgeInsets.symmetric(horizontal: 10),
@@ -38,6 +39,7 @@ class _HomeState extends State<Home> {
           onSearch: _filteredFishes,
           searchBarController: _searchBarController,
           cancellationWidget: Text("Cancelar"),
+          placeHolder: Center(child: Text("Ingresa el nombre del pez a buscar")),
           emptyWidget: Center(child: Text("No se encontraron resultados ...")),
           onCancelled: () {
             print("Cancelled triggered");
@@ -65,25 +67,6 @@ class _HomeState extends State<Home> {
               ),
             );
           },
-        ),
-      ),
-    );
-  }
-}
-
-class Detail extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: Column(
-          children: <Widget>[
-            IconButton(
-              icon: Icon(Icons.arrow_back),
-              onPressed: () => Navigator.of(context).pop(),
-            ),
-            Text("Detail"),
-          ],
         ),
       ),
     );

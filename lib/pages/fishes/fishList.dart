@@ -8,20 +8,23 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class FishList extends StatefulWidget {
   final FishModel fishData;
-  FishList({Key key, this.fishData}) : super(key: key);
+  final String userRol;
+  FishList({Key key, this.fishData, this.userRol}) : super(key: key);
 
   @override
   _FishListState createState() => _FishListState();
 }
 
 class _FishListState extends State<FishList> {
+
   @override
   Widget build(BuildContext context) {
+    
     return Scaffold(
       appBar: new AppBar(
         title: Text(widget.fishData.documentID),
       ),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: widget.userRol == 'admin' ? FloatingActionButton(
           child: Icon(Icons.add),
           onPressed: () {
             Navigator.push(
@@ -31,7 +34,7 @@ class _FishListState extends State<FishList> {
                           fishCategory: widget.fishData.documentID,
                           isEditing: false,
                         )));
-          }),
+          }) : null,
       body: FutureBuilder(
         future: DatabaseService(null).getFishList(widget.fishData.documentID),
         initialData: new List<DocumentSnapshot>(),

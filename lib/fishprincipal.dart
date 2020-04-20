@@ -102,32 +102,34 @@ class _FishPrincipalState extends State<FishPrincipal>
     });
 
     return new Scaffold(
-      appBar: new AppBar(
-        title: Text("Uribe Paraco"),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.search),
-            onPressed: () {
-              Navigator.push(
-                context,
-              new MaterialPageRoute(builder: (context) => new Home()));
-            },
-          ),
-        ],
-        bottom: new TabBar(controller: _tabController, tabs: <Widget>[
-          new Tab(icon: new Icon(FontAwesomeIcons.tint)),
-          new Tab(icon: new Icon(FontAwesomeIcons.fish)),
-          new Tab(icon: new Icon(Icons.speaker_phone)),
-          new Tab(icon: new Icon(Icons.settings))
-        ]),
-      ),
-      drawer: _getDrawer(context, user),
-      body: new TabBarView(controller: _tabController, children: <Widget>[
-        new Lagos(),
-        new Fishp(),
-        new Sensor(),
-        new Settings(),
-      ]),
-    );
+        appBar: new AppBar(
+          title: Text('Peces'),
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(Icons.search),
+              onPressed: () {
+                Navigator.push(context,
+                    new MaterialPageRoute(builder: (context) => new Home()));
+              },
+            ),
+          ],
+          bottom: userRol != 'usuario'
+              ? new TabBar(controller: _tabController, tabs: <Widget>[
+                  new Tab(icon: new Icon(FontAwesomeIcons.tint)),
+                  new Tab(icon: new Icon(FontAwesomeIcons.fish)),
+                  new Tab(icon: new Icon(Icons.speaker_phone)),
+                  new Tab(icon: new Icon(Icons.settings))
+                ])
+              : null,
+        ),
+        drawer: _getDrawer(context, user),
+        body: userRol != 'usuario'
+            ? new TabBarView(controller: _tabController, children: <Widget>[
+                new Lagos(),
+                new Fishp(userRol: userRol,),
+                new Sensor(),
+                new Settings(),
+              ])
+            : Fishp());
   }
 }

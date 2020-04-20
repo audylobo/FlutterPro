@@ -5,21 +5,27 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class Fishp extends StatelessWidget {
-static const String routeName = "/pezhome";
+
+  final String userRol;
+
+  static const String routeName = "/pezhome";
+
+  const Fishp({Key key, this.userRol}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return StreamProvider<List<FishModel>>.value(
       initialData: null,
       value: DatabaseService(null).fishStream,
       child: Scaffold(        
-        body: FishCategories(),
+        body: FishCategories(userRol: userRol,),
       ),      
     );
   }
 }
 
 class FishCategories extends StatefulWidget {
-  FishCategories({Key key}) : super(key: key);
+  final String userRol;
+  FishCategories({Key key, this.userRol}) : super(key: key);
 
   @override
   _FishCategoriesState createState() => _FishCategoriesState();
@@ -47,7 +53,7 @@ class _FishCategoriesState extends State<FishCategories> {
               // Go to de fish selection page
               Navigator.push(
                 context,
-              new MaterialPageRoute(builder: (context) => new FishList(fishData: categories[index])));
+              new MaterialPageRoute(builder: (context) => new FishList(fishData: categories[index], userRol: widget.userRol,)));
             },
           ),
         );

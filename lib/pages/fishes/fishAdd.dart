@@ -83,7 +83,7 @@ class _FishAddState extends State<FishAdd> {
     return Scaffold(
       appBar: AppBar(
         title: widget.isEditing
-            ? Text('Editar ' + widget.fishData['nombrePez'])
+            ? Text('Editar ${widget.fishCategory} ${widget.fishData['nombrePez']}')
             : Text('Agregar nuevo ' + widget.fishCategory),
         actions: <Widget>[
           IconButton(
