@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:drawer_menu/models/fish_model.dart';
+import 'package:drawer_menu/models/lake_model.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
 class DatabaseService {
@@ -13,14 +14,22 @@ class DatabaseService {
       Firestore.instance.collection('users');
   final CollectionReference fishDataCollection =
       Firestore.instance.collection('fish');
+  final CollectionReference lakeDataCollection =
+      Firestore.instance.collection('lakes');
+  final CollectionReference sensorDataCollection =
+      Firestore.instance.collection('sensors');
+  final CollectionReference reportDataCollection =
+      Firestore.instance.collection('reports');
 
   //User
-  Future updateUserData(String rol, String phone, String email) async {
+  Future updateUserData(
+      String rol, String phone, String email, String token) async {
     await userDataCollection.document(uid).setData({
       'rol': rol,
       'phone': phone,
       'registration_date': DateTime.now(),
-      'email': email
+      'email': email,
+      'token': token
     });
   }
 
@@ -109,4 +118,64 @@ class DatabaseService {
     final String url = (await downloadUrl.ref.getDownloadURL());
     return url;
   }
+
+  /* 
+  
+        LAKES
+  
+  */
+
+  Future<List<DocumentSnapshot>> getLakeList() {
+    return lakeDataCollection
+        .getDocuments()
+        .then((snapshot) => snapshot.documents);
+  }
+
+  Future createNewLake(LakeModel lakeData) {
+    return lakeDataCollection.document().setData(lakeData.toMap(), merge: true);
+  }
+
+  Future editLake(String lakeDocumentId, LakeModel lakeData) {
+    return lakeDataCollection
+        .document(lakeDocumentId)
+        .setData(lakeData.toMap());
+  }
+
+  Future deleteLake(String lakeDocumentId) {
+    return lakeDataCollection.document(lakeDocumentId).delete();
+  }
+
+  /*
+
+    REPORTS
+
+  */
+
+  Future<List<DocumentSnapshot>> getReportList() {
+    return reportDataCollection.orderBy('createdDate',  descending: true)
+        .getDocuments()
+        .then((snapshot) => snapshot.documents);
+  }
+
+  Future createNewReport(String userName) async {
+    // Get all sensor data
+    var sensors = await sensorDataCollection
+        .getDocuments()
+        .then((snapshot) => snapshot.documents);
+
+    var sensorData = sensors.map((test) => test.data).toList();
+
+    return reportDataCollection.document().setData({
+      'createdBy': userName,
+      'createdDate': DateTime.now(),
+      'sensors': sensorData
+    });
+  }
+
+  /*
+
+    SENSORS
+
+  */
+
 }

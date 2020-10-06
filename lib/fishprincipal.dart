@@ -2,12 +2,14 @@ import 'package:drawer_menu/models/user_model.dart';
 import 'package:drawer_menu/pages/fishes/searchFish.dart';
 import 'package:drawer_menu/services/auth_service.dart';
 import 'package:drawer_menu/services/database_service.dart';
+import 'package:drawer_menu/services/push_service.dart';
 import 'package:flutter/material.dart';
 import 'package:drawer_menu/font_awesome_flutter.dart';
 import 'package:drawer_menu/menu/lagos.dart';
 import 'package:drawer_menu/menu/sensor.dart';
 import 'package:drawer_menu/menu/settings.dart';
 import 'package:drawer_menu/pages/fishes/fishP.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:provider/provider.dart';
 
 class FishPrincipal extends StatefulWidget {
@@ -64,6 +66,7 @@ class _FishPrincipalState extends State<FishPrincipal>
               if (route == 'cerrar') {
                 _authService.singOut();
               } else {
+                Navigator.pop(context);
                 Navigator.of(context).pushNamed(route);
               }
             });
@@ -83,27 +86,32 @@ class _FishPrincipalState extends State<FishPrincipal>
   }
 
   TabController _tabController;
-  var user;
-  var userRol;
 
+  var userRol;
+  
   @override
   void initState() {
     super.initState();
+
     _tabController = new TabController(vsync: this, initialIndex: 1, length: 4);
   }
 
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<User>(context);
-    DatabaseService(user.uid).getUserData().then((document) {
-      setState(() {
-        userRol = document.data['rol'].toString();
+    
+    final user = Provider.of<User>(context);    
+
+    if (userRol == null) {
+      DatabaseService(user.uid).getUserData().then((document) {
+        setState(() {
+          userRol = document.data['rol'].toString();
+        });
       });
-    });
+    }
 
     return new Scaffold(
         appBar: new AppBar(
-          title: Text('Peces'),
+          title: Text('Fish life'),
           actions: <Widget>[
             IconButton(
               icon: Icon(Icons.search),
@@ -115,10 +123,10 @@ class _FishPrincipalState extends State<FishPrincipal>
           ],
           bottom: userRol != 'usuario'
               ? new TabBar(controller: _tabController, tabs: <Widget>[
-                  new Tab(icon: new Icon(FontAwesomeIcons.tint)),
-                  new Tab(icon: new Icon(FontAwesomeIcons.fish)),
-                  new Tab(icon: new Icon(Icons.speaker_phone)),
-                  new Tab(icon: new Icon(Icons.settings))
+                  new Tab(icon: new Icon(FontAwesomeIcons.tint), text: 'Lagos',),
+                  new Tab(icon: new Icon(FontAwesomeIcons.fish), text: 'Peces',),
+                  new Tab(icon: new Icon(Icons.speaker_phone), text: 'Sensores',),
+                  new Tab(icon: new Icon(Icons.settings), text: 'Configuración',)
                 ])
               : null,
         ),
@@ -126,10 +134,13 @@ class _FishPrincipalState extends State<FishPrincipal>
         body: userRol != 'usuario'
             ? new TabBarView(controller: _tabController, children: <Widget>[
                 new Lagos(),
-                new Fishp(userRol: userRol,),
+                new Fishp(
+                  userRol: userRol,
+                ),
                 new Sensor(),
                 new Settings(),
               ])
             : Fishp());
   }
+
 }

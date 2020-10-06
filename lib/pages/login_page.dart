@@ -1,7 +1,9 @@
 import 'package:drawer_menu/services/auth_service.dart';
+import 'package:drawer_menu/services/push_service.dart';
 import 'package:flutter/material.dart';
 import 'package:drawer_menu/registro.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:provider/provider.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
 class LoginPage extends StatefulWidget {
@@ -36,6 +38,9 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+
+    final pushProvider = Provider.of<PushNotificationService>(context);
+
     return Scaffold(
       resizeToAvoidBottomPadding: false,
       body: Stack(
@@ -171,7 +176,7 @@ class _LoginPageState extends State<LoginPage> {
                             setState(() {
                               isLoading = true;
                             });
-                            _authService.signInWithGoogle()
+                            _authService.signInWithGoogle(pushProvider.pushToken)
                             .catchError(
                               (error) => _onError(context, error)
                             );
@@ -183,7 +188,7 @@ class _LoginPageState extends State<LoginPage> {
                           textColor: Colors.white,
                           child: Text('Entrar con Facebook'),
                           onPressed: () {
-                            _authService.signInWithFacebook().catchError(
+                            _authService.signInWithFacebook(pushProvider.pushToken).catchError(
                               (error) => _onError(context, error)
                             );
                           },

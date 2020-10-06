@@ -42,8 +42,9 @@ class AuthService {
     return _userFromFirebaseUser(user); 
   }
 
-  Future<User> signInWithGoogle() async {
+  Future<User> signInWithGoogle(String token) async {
     // CERTIFICADO: 4F:BB:A2:5E:C0:5D:80:A1:53:5D:EF:E6:74:81:4B:EE:A8:08:D9:B1
+    //BB:8E:50:DA:CB:BB:71:C4:00:2B:01:44:EE:6F:DC:5A:8E:D2:3A:E0
     final googleUser = await _googleSignIn.signIn();
     final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
 
@@ -60,7 +61,7 @@ class AuthService {
 
     if (!userData.exists) {
       // Create data on new user
-      await DatabaseService(user.uid).updateUserData('usuario', '', user.email);
+      await DatabaseService(user.uid).updateUserData('usuario', '', user.email, token);
     } else {
       // Set data to operate (userData.data)
 
@@ -70,7 +71,7 @@ class AuthService {
     return _userFromFirebaseUser(user);
   }
 
-  Future<User> signInWithFacebook() async {
+  Future<User> signInWithFacebook(String token) async {
     // CERTIFICADO: T7uiXsBdgKFTXe/mdIFL7qgI2bE= 
     final FacebookLoginResult facebookLoginResult = await facebookSignIn.logIn(['email', 'public_profile']);
     FacebookAccessToken facebookAccessToken = facebookLoginResult.accessToken;
@@ -84,7 +85,7 @@ class AuthService {
 
     if (!userData.exists) {
       // Create data on new user
-      await DatabaseService(user.uid).updateUserData('usuario', '', user.email);
+      await DatabaseService(user.uid).updateUserData('usuario', '', user.email, token);
     } else {
       // Set data to operate (userData.data)
 
@@ -95,7 +96,7 @@ class AuthService {
   }
 
   // Register with email and password
-  Future signUpEmail(RegisterData registerData) async {
+  Future signUpEmail(RegisterData registerData, String token) async {
 
     AuthResult result = await _auth.createUserWithEmailAndPassword(email: registerData.email, password: registerData.password );
     FirebaseUser user = result.user;
@@ -108,7 +109,7 @@ class AuthService {
     await user.updateProfile(info);
 
     // Create user info (rol, phone) on firestore
-    await DatabaseService(user.uid).updateUserData('usuario', registerData.phone, registerData.email);
+    await DatabaseService(user.uid).updateUserData('usuario', registerData.phone, registerData.email, token);
 
     _auth.signOut();
   }
@@ -137,6 +138,8 @@ class AuthService {
   String authErrorHandling(error) {
 
     String errorMessage;
+
+    print('error auth: ' + error.toString());
 
     switch (error.code) {
       case "ERROR_INVALID_EMAIL":

@@ -1,6 +1,8 @@
 import 'package:drawer_menu/services/auth_service.dart';
+import 'package:drawer_menu/services/push_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:provider/provider.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
 class Registro extends StatefulWidget {
@@ -28,6 +30,7 @@ class _RegistroState extends State<Registro> {
 
   @override
   Widget build(BuildContext context) {
+    final pushProvider = Provider.of<PushNotificationService>(context);
     return Scaffold(
       key: scaffolkey,
       appBar: new AppBar(
@@ -219,7 +222,7 @@ class _RegistroState extends State<Registro> {
                             isLoading = true;
                           });                          
                           _authService
-                              .signUpEmail(user)
+                              .signUpEmail(user, pushProvider.pushToken)
                               .then((onValue) =>                                 
                                 Alert(context: context, type: AlertType.success, title: "Cuenta creada con exito", buttons: [DialogButton(child: Text('Ok'), onPressed: () {Navigator.pop(context);})]).show()
                               )
