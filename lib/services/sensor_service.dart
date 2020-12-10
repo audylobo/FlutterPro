@@ -8,7 +8,7 @@ class SensorService {
   SensorModel getSensorData() {
     return new SensorModel(sensorID, _randomInt(2), _randomInt(2),
         _randomInt(1), _randomInt(2));
-  }
+  }//asd
 
   String _randomInt(int length) {
     var rand = new Random();
