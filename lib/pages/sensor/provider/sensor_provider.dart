@@ -84,6 +84,7 @@ class CreateProviderSensor with ChangeNotifier {
     textDistanciaAgua            .clear();
     textFrecuenciaAgua           .clear();
     textCorrienteAgua            .clear();
+    this.setImage= null;
     
 
 
