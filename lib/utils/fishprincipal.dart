@@ -2,15 +2,17 @@ import 'package:drawer_menu/models/user_model.dart';
 import 'package:drawer_menu/pages/fishes/searchFish.dart';
 import 'package:drawer_menu/services/auth_service.dart';
 import 'package:drawer_menu/services/database_service.dart';
-import 'package:drawer_menu/services/push_service.dart';
 import 'package:flutter/material.dart';
-import 'package:drawer_menu/font_awesome_flutter.dart';
+
 import 'package:drawer_menu/menu/lagos.dart';
 import 'package:drawer_menu/menu/sensor.dart';
 import 'package:drawer_menu/menu/settings.dart';
 import 'package:drawer_menu/pages/fishes/fishP.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
 import 'package:provider/provider.dart';
+
+import 'font_awesome_flutter.dart';
 
 class FishPrincipal extends StatefulWidget {
   static const String routeName = "/fishprincipal";
@@ -77,7 +79,7 @@ class _FishPrincipalState extends State<FishPrincipal>
     return Drawer(
         child: ListView(children: <Widget>[
       header,
-      _getItem(new Icon(FontAwesomeIcons.bars), 'Reporte', "/report"),
+      _getItem(new Icon(FontAwesomeIcons.bars), 'Reporte', "reportes"),
       _getItem(new Icon(Icons.live_help), 'Ayuda', "/ayuda"),
       Divider(),
       _getItem(new Icon(Icons.exit_to_app), 'Cerrar sesión', "cerrar"),
@@ -130,6 +132,7 @@ class _FishPrincipalState extends State<FishPrincipal>
                 ])
               : null,
         ),
+       
         drawer: _getDrawer(context, user),
         body: userRol != 'usuario'
             ? new TabBarView(controller: _tabController, children: <Widget>[

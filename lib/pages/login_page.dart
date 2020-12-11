@@ -1,7 +1,8 @@
+import 'package:drawer_menu/routes.dart';
 import 'package:drawer_menu/services/auth_service.dart';
 import 'package:drawer_menu/services/push_service.dart';
 import 'package:flutter/material.dart';
-import 'package:drawer_menu/registro.dart';
+import 'package:drawer_menu/pages/registro.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
@@ -200,10 +201,7 @@ class _LoginPageState extends State<LoginPage> {
                           textColor: Colors.white,
                           child: Text('o Registrate ¡Aqui!'),
                           onPressed: () {
-                            Navigator.push(
-                                context,
-                                new MaterialPageRoute(
-                                    builder: (context) => new Registro()));
+                           Navigator.pushNamed(context, Routes.registro);
                           },
                         ),
                       ],

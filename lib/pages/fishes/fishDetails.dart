@@ -1,7 +1,8 @@
+import 'package:carousel_slider/carousel_slider.dart';
+import 'package:drawer_menu/utils/font_awesome_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import '../../carousel_slider.dart';
-import '../../font_awesome_flutter.dart';
 
 class FishDetails extends StatefulWidget {
   final Map<String, dynamic> fishDetails;

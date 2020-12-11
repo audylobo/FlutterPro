@@ -1,6 +1,8 @@
-import 'package:drawer_menu/font_awesome_flutter.dart';
+
+import 'package:drawer_menu/routes.dart';
 import 'package:flutter/material.dart';
-import 'package:drawer_menu/menu/sensores/sensorA.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
 
 class Sensor extends StatefulWidget {
   static const String routeName = "/sensores";
@@ -48,24 +50,30 @@ class _SensorState extends State<Sensor> {
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(FontAwesomeIcons.thermometerEmpty),
-            title: Text('Temperatura'),
+            label: ('Temperatura'),
           ),
           BottomNavigationBarItem(
             icon: Icon(FontAwesomeIcons.wind),
-            title: Text('Oxigeno'),
+            label: ('Oxigeno'),
           ),
           BottomNavigationBarItem(
             icon: Icon(FontAwesomeIcons.chartBar),
-            title: Text('PH'),
+            label: ('PH'),
           ),
           BottomNavigationBarItem(
             icon: Icon(FontAwesomeIcons.ruler),
-            title: Text('Nivel de agua'),
+            label: ('Nivel de agua'),
           ),
         ],
         type: BottomNavigationBarType.fixed,
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
+      ),
+      floatingActionButton: FloatingActionButton(onPressed: (){
+
+        Navigator.pushNamed(context, Routes.crearSensor);
+      },
+      child: Icon(Icons.add),
       ),
     );
   }

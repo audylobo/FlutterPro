@@ -4,8 +4,9 @@ import 'package:drawer_menu/pages/lakes/add_lake.dart';
 import 'package:drawer_menu/services/database_service.dart';
 import 'package:drawer_menu/services/sensor_service.dart';
 import 'package:flutter/material.dart';
-import 'package:drawer_menu/font_awesome_flutter.dart';
+
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class Lagos extends StatefulWidget {
   static const String routeName = "/lagos";

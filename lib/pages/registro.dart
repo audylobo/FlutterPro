@@ -38,18 +38,12 @@ class _RegistroState extends State<Registro> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
-        child: 
-        
-          isLoading ? 
-          
-            SpinKitCircle(
-              color: Colors.blue,
-              size: 100.0,
-            )
-            
-            : 
-            
-            Form(
+        child: isLoading
+            ? SpinKitCircle(
+                color: Colors.blue,
+                size: 100.0,
+              )
+            : Form(
                 key: _formkey,
                 child: ListView(children: <Widget>[
                   Padding(
@@ -216,20 +210,33 @@ class _RegistroState extends State<Registro> {
                       child: Text("ENVIAR DATOS"),
                       color: Colors.green,
                       textColor: Colors.white,
-                      onPressed: () {                        
+                      onPressed: () {
                         if (_formkey.currentState.validate()) {
                           setState(() {
                             isLoading = true;
-                          });                          
+                          });
                           _authService
                               .signUpEmail(user, pushProvider.pushToken)
-                              .then((onValue) =>                                 
-                                Alert(context: context, type: AlertType.success, title: "Cuenta creada con exito", buttons: [DialogButton(child: Text('Ok'), onPressed: () {Navigator.pop(context);})]).show()
-                              )
-                              .catchError(
-                                  (error) => 
-                                    Alert(context: context,  type: AlertType.error, title: "Error", desc: _authService.authErrorHandling(error)).show().then((onValue) => setState(() => isLoading = false)) 
-                                  );
+                              .then((onValue) => Alert(
+                                      context: context,
+                                      type: AlertType.success,
+                                      title: "Cuenta creada con exito",
+                                      buttons: [
+                                        DialogButton(
+                                            child: Text('Ok'),
+                                            onPressed: () {
+                                              Navigator.pop(context);
+                                            })
+                                      ]).show())
+                              .catchError((error) => Alert(
+                                      context: context,
+                                      type: AlertType.error,
+                                      title: "Error",
+                                      desc:
+                                          _authService.authErrorHandling(error))
+                                  .show()
+                                  .then((onValue) =>
+                                      setState(() => isLoading = false)));
                         }
                       })
                 ]),
