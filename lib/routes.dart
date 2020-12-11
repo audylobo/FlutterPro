@@ -6,31 +6,26 @@ import 'pages/report.dart';
 import 'pages/sensor/pages/create_sensor.dart';
 
 class Routes {
-
   static const String login = '/';
   static const String registro = 'registro';
   static const String reportes = 'reportes';
 
-    static const String crearSensor = 'crearSensor';
-
+  static const String crearSensor = 'crearSensor';
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
-
     switch (settings.name) {
 
- case crearSensor:
+
+      
+      case crearSensor:
         return MyCustomRoute(
           builder: (_) => CreateSensor(),
         );
 
-
-
-
-       case reportes:
+      case reportes:
         return MyCustomRoute(
           builder: (_) => Report(),
         );
-
 
       case registro:
         return MyCustomRoute(

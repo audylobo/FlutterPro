@@ -16,7 +16,7 @@ class CustomToast {
       timeInSecForIosWeb: 1,
       backgroundColor: backgroundcolor,
       textColor: textcolor,
-      fontSize: 20,
+      fontSize: 15,
     );
   }
 

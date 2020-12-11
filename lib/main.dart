@@ -3,15 +3,13 @@ import 'package:drawer_menu/services/push_service.dart';
 import 'package:drawer_menu/utils/wraper.dart';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+
 import 'package:provider/provider.dart';
-import 'package:drawer_menu/models/user_model.dart';
+
 import 'package:drawer_menu/services/auth_service.dart';
 
-import 'package:drawer_menu/pages/fishes/fishP.dart';
-import 'package:drawer_menu/pages/help.dart';
-import 'package:drawer_menu/pages/report.dart';
-import 'package:drawer_menu/pages/login_page.dart';
+
+import 'pages/sensor/provider/sensor_provider.dart';
 
 
 void main() => runApp(MyApp());
@@ -37,6 +35,7 @@ class _MyAppState extends State<MyApp> {
       
     return MultiProvider(
       providers: [
+         ListenableProvider<CreateProviderSensor>(create: (_) => CreateProviderSensor()),
         ChangeNotifierProvider<PushNotificationService>(create: (context) => pushProvider, ),
         StreamProvider.value(value: AuthService().user),
       ],

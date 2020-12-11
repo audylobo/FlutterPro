@@ -1,29 +1,114 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:drawer_menu/pages/sensor/provider/sensor_provider.dart';
+import 'package:drawer_menu/utils/getPhoto.dart';
 import 'package:drawer_menu/widgets/toast.dart';
 import 'package:flutter/material.dart';
 
 class ControllerCreateSensor {
-  CustomToast toast = new CustomToast(); //mensajes
-  
 
-  void createSensor(BuildContext context, GlobalKey<FormState> formkey) async {
-  
+  CustomToast toast = new CustomToast(); //mensajes por pantalla
+
+  GetPhoto getPhoto = new GetPhoto();
+
+  void createSensorTemperatura(BuildContext context,
+      GlobalKey<FormState> formkey, CreateProviderSensor provider) async {
     try {
-      if (formkey.currentState.validate()) { //validacion del form
-        Firestore.instance.collection("snsor").document().setData({ //se crea la tupla del libro
-      //MAP
-         }).then((value) {
+      if (formkey.currentState.validate()) {
+        //validacion del form
+        Firestore.instance.collection("sensor temperatura").document().setData({
+          //se crea la tupla del SENSOR
+
+          //MAP DE DOCUMENTO
+
+          "consumo": provider.textCONSUMOTemperatura.text.trim(),
+          "precio": provider.textPRECIOTemperatura.text.trim(),
+          "temperatura": provider.textTEMPERATURATOLERABLE.text.trim(),
+         "url_image": await getPhoto.getUrlImage(provider.image)
         
+        }).then((value) {
           toast.show("Sensor registrado", Colors.blue[900], Colors.white);
-        
-          //Navigator.pushNamed(context, Routes.bibliotecarioHome);
+          provider.clearText();
+          // Navigator.pushNamed(context, Routes.bibliotecarioHome); // navegacion a la pantalla de home.
         });
       } else {
-    
         toast.show("Completa todos los datos", Colors.red, Colors.white);
       }
     } catch (event) {
-      
+      print(event.toString());
+      toast.show(event.toString(), Colors.red, Colors.white);
+    }
+  }
+
+  void createSensorOxigeno(BuildContext context, GlobalKey<FormState> formkey,
+      CreateProviderSensor provider) async {
+    try {
+      if (formkey.currentState.validate()) {
+        Firestore.instance.collection("sensor oxigeno").document().setData({
+          "voltaje": provider.textVOLTAJE.text.trim(),
+          "precio": provider.textPrecioVoltaje.text.trim(),
+          "deteccion": provider.textRangoDeteccionVoltaje.text.trim(),
+          "precision": provider.textRangoPrecisionVoltaje.text.trim(),
+         "url_image": await getPhoto.getUrlImage(provider.image)
+        
+        }).then((value) {
+          toast.show("Sensor registrado", Colors.blue[900], Colors.white);
+          provider.clearText();
+        });
+      } else {
+        toast.show("Completa todos los datos", Colors.red, Colors.white);
+      }
+    } catch (event) {
+      print(event.toString());
+      toast.show(event.toString(), Colors.red, Colors.white);
+    }
+  }
+
+  void createSensorPH(BuildContext context, GlobalKey<FormState> formkey,
+      CreateProviderSensor provider) async {
+    try {
+      if (formkey.currentState.validate()) {
+        Firestore.instance.collection("sensor ph").document().setData({
+          "voltaje": provider.textVOLTAJEPH.text.trim(),
+          "medicion": provider.textMEDICIONPH.text.trim(),
+          "temperatura_tolerable":
+              provider.textTemperaturaTolerablePH.text.trim(),
+          "precision": provider.textPrecisionPH.text.trim(),
+          "tiempo_respuesta": provider.textTiempoRespuestaPH.text.trim(),
+          "url_image": await getPhoto.getUrlImage(provider.image)
+        
+        }).then((value) {
+          toast.show("Sensor registrado", Colors.blue[900], Colors.white);
+          provider.clearText();
+        });
+      } else {
+        toast.show("Completa todos los datos", Colors.red, Colors.white);
+      }
+    } catch (event) {
+      print(event.toString());
+      toast.show(event.toString(), Colors.red, Colors.white);
+    }
+  }
+
+  void createSensorNivelAgua(BuildContext context, GlobalKey<FormState> formkey,
+      CreateProviderSensor provider) async {
+    try {
+      if (formkey.currentState.validate()) {
+        Firestore.instance.collection("sensor agua").document().setData({
+          "voltaje": provider.textVOLTAJEAgua.text.trim(),
+          "precio": provider.textPrecioAgua.text.trim(),
+          "distancia": provider.textDistanciaAgua.text.trim(),
+          "frecuencia": provider.textFrecuenciaAgua.text.trim(),
+          "corriente": provider.textCorrienteAgua.text.trim(),
+           "url_image": await getPhoto.getUrlImage(provider.image)
+        
+        }).then((value) {
+          toast.show("Sensor registrado", Colors.blue[900], Colors.white);
+          provider.clearText();
+        });
+      } else {
+        toast.show("Completa todos los datos", Colors.red, Colors.white);
+      }
+    } catch (event) {
       print(event.toString());
       toast.show(event.toString(), Colors.red, Colors.white);
     }
