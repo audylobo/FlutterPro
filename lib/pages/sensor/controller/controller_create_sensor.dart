@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 
 class ControllerCreateSensor {
 
-  CustomToast toast = new CustomToast(); //mensajes por pantalla
+  CustomToast toast = new CustomToast(); 
 
   GetPhoto getPhoto = new GetPhoto();
 

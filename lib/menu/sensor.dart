@@ -1,43 +1,66 @@
+import 'package:drawer_menu/models/sensores/agua.dart';
+import 'package:drawer_menu/models/sensores/oxigeno.dart';
+import 'package:drawer_menu/models/sensores/ph.dart';
 import 'package:drawer_menu/models/sensores/temperatura.dart';
+import 'package:drawer_menu/pages/sensor/widgets/list_sensor_agua.dart';
+import 'package:drawer_menu/pages/sensor/widgets/list_sensor_oxigeno.dart';
+import 'package:drawer_menu/pages/sensor/widgets/list_sensor_ph.dart';
 import 'package:drawer_menu/pages/sensor/widgets/list_sensor_temperatura.dart';
 import 'package:drawer_menu/routes.dart';
 import 'package:drawer_menu/services/streams/stream_sensor_temperatura.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
 
-class Sensor extends StatefulWidget {
-  @override
-  _SensorState createState() => _SensorState();
-}
 
-class _SensorState extends State<Sensor> {
-  int _selectedIndex = 0;
-  static const TextStyle optionStyle =
-      TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
+// ignore: must_be_immutable
+class Sensor extends StatelessWidget {
 
-  StreamSensorTemperatura sensorTemperaturaProvider =
-      new StreamSensorTemperatura();
 
-  void _onItemTapped(int index) {
-    _selectedIndex = index;
-   
-    setState(() {});
-  }
 
-  @override
-  void initState() {
-   
-    super.initState();
-  }
+  StreamSensorTemperatura sensorTemperaturaProvider = new StreamSensorTemperatura();
 
   
 
   @override
   Widget build(BuildContext context) {
-
-   
-    return Scaffold(
-      body: [
+    final provider = Provider.of<Person>(context,listen: true);
+    return Consumer<Person>(
+      builder: (context, person, child) {
+        return Scaffold(
+          body: child,
+          bottomNavigationBar: BottomNavigationBar(
+            items: <BottomNavigationBarItem>[
+              BottomNavigationBarItem(
+                icon: Icon(FontAwesomeIcons.thermometerEmpty),
+                label: ('Temperatura'),
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(FontAwesomeIcons.wind),
+                label: ('Oxigeno'),
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(FontAwesomeIcons.chartBar),
+                label: ('PH'),
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(FontAwesomeIcons.ruler),
+                label: ('Nivel de agua'),
+              ),
+            ],
+            type: BottomNavigationBarType.fixed,
+            currentIndex: person.age,
+            onTap: person.increaseAge,
+          ),
+          floatingActionButton: FloatingActionButton(
+            onPressed: () {
+              Navigator.pushNamed(context, Routes.crearSensor);
+            },
+            child: Icon(Icons.add),
+          ),
+        );
+      },
+      child: [
         FutureBuilder<List<SensorTemperatura>>(
           future: sensorTemperaturaProvider.getSensoresTemperatura(),
           builder: (BuildContext context,
@@ -52,48 +75,58 @@ class _SensorState extends State<Sensor> {
             }
           },
         ),
-        Text(
-          'Sensor de oxigeno',
-          style: optionStyle,
+        FutureBuilder<List<SensorOxigeno>>(
+          future: sensorTemperaturaProvider.getSensoresOxigeno(),
+          builder: (BuildContext context,
+              AsyncSnapshot<List<SensorOxigeno>> snapshot) {
+            if (snapshot.hasData) {
+              List<SensorOxigeno> list = snapshot.data;
+              return ListSensorOxigeno(
+                array: list,
+              );
+            } else {
+              return Center(child: CircularProgressIndicator());
+            }
+          },
         ),
-        Text(
-          'Sensor de Ph',
-          style: optionStyle,
+        FutureBuilder<List<SensorPH>>(
+          future: sensorTemperaturaProvider.getSensorPH(),
+          builder:
+              (BuildContext context, AsyncSnapshot<List<SensorPH>> snapshot) {
+            if (snapshot.hasData) {
+              List<SensorPH> list = snapshot.data;
+              return ListSensorPH(
+                array: list,
+              );
+            } else {
+              return Center(child: CircularProgressIndicator());
+            }
+          },
         ),
-        Text(
-          'Sensor de nivel de agua',
-          style: optionStyle,
+        FutureBuilder<List<SensorAgua>>(
+          future: sensorTemperaturaProvider.getSensorAgua(),
+          builder:
+              (BuildContext context, AsyncSnapshot<List<SensorAgua>> snapshot) {
+            if (snapshot.hasData) {
+              List<SensorAgua> list = snapshot.data;
+              return ListSensorAgua(
+                array: list,
+              );
+            } else {
+              return Center(child: CircularProgressIndicator());
+            }
+          },
         ),
-      ][_selectedIndex],
-      bottomNavigationBar: BottomNavigationBar(
-        items: <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(FontAwesomeIcons.thermometerEmpty),
-            label: ('Temperatura'),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(FontAwesomeIcons.wind),
-            label: ('Oxigeno'),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(FontAwesomeIcons.chartBar),
-            label: ('PH'),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(FontAwesomeIcons.ruler),
-            label: ('Nivel de agua'),
-          ),
-        ],
-        type: BottomNavigationBarType.fixed,
-        currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.pushNamed(context, Routes.crearSensor);
-        },
-        child: Icon(Icons.add),
-      ),
+      ][provider.age],
     );
+  }
+}
+
+class Person with ChangeNotifier {
+  int age = 0;
+
+  void increaseAge(int dato) {
+    this.age = dato;
+    notifyListeners();
   }
 }

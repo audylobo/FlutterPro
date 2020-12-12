@@ -1,11 +1,12 @@
-import 'package:drawer_menu/models/sensores/temperatura.dart';
+import 'package:drawer_menu/models/sensores/oxigeno.dart';
 import 'package:drawer_menu/routes.dart';
+
 import 'package:flutter/material.dart';
 
-class ListSensorTemperatura extends StatelessWidget {
-  final List<SensorTemperatura> array;
+class ListSensorOxigeno extends StatelessWidget {
+  final List<SensorOxigeno> array;
 
-  ListSensorTemperatura({
+  ListSensorOxigeno({
     @required this.array,
   });
   @override
@@ -18,11 +19,12 @@ class ListSensorTemperatura extends StatelessWidget {
     itemBuilder: (context, index) {
       return ListTile(
         onTap: () {
-          Navigator.pushNamed(context, Routes.editSensorTemperatura,arguments: array[index]);
+
+          Navigator.pushNamed(context, Routes.editSensorOxigeno,arguments: array[index]);
         },
-        leading: index % 2 == 0 ? Icon(Icons.alarm_on) : Icon(Icons.access_alarm),
+        leading: index % 2 == 0 ? Icon(Icons.flaky) : Icon(Icons.thermostat_outlined),
         title: Text(array[index].referencia),
-        subtitle: Text(array[index].resistenciaagua),
+        subtitle: Text(array[index].precio),
         trailing: Icon(Icons.arrow_right),
       );
     },

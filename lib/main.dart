@@ -9,6 +9,7 @@ import 'package:provider/provider.dart';
 import 'package:drawer_menu/services/auth_service.dart';
 
 
+import 'menu/sensor.dart';
 import 'pages/sensor/provider/sensor_provider.dart';
 
 
@@ -35,6 +36,7 @@ class _MyAppState extends State<MyApp> {
       
     return MultiProvider(
       providers: [
+        ChangeNotifierProvider(create: (_) => Person()),
         ListenableProvider<CreateProviderSensor>(create: (_) => CreateProviderSensor()),
         ChangeNotifierProvider<PushNotificationService>(create: (context) => pushProvider, ),
         StreamProvider.value(value: AuthService().user),
