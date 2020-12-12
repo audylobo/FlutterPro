@@ -30,22 +30,16 @@ class _SensorState extends State<Sensor> {
     super.initState();
   }
 
-  @override
-  void dispose() {
-    print("DISPOSE");
-     sensorTemperaturaProvider?.disposeStreams();
-
-    super.dispose();
-  }
+  
 
   @override
   Widget build(BuildContext context) {
-   sensorTemperaturaProvider.getPopulares();
+
    
     return Scaffold(
       body: [
-        StreamBuilder<List<SensorTemperatura>>(
-          stream: sensorTemperaturaProvider.popularesStream,
+        FutureBuilder<List<SensorTemperatura>>(
+          future: sensorTemperaturaProvider.getSensoresTemperatura(),
           builder: (BuildContext context,
               AsyncSnapshot<List<SensorTemperatura>> snapshot) {
             if (snapshot.hasData) {
