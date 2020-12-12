@@ -19,6 +19,7 @@ class CreateSensor extends StatefulWidget {
 class _CreateSensorState extends State<CreateSensor> {
   ControllerCreateSensor controller = new ControllerCreateSensor();
 
+  final _formKey = GlobalKey<FormState>();
   final _formKeyTemperatura = GlobalKey<FormState>();
   final _formKeyOxigeno = GlobalKey<FormState>();
   final _formKeyPH = GlobalKey<FormState>();
@@ -28,6 +29,7 @@ class _CreateSensorState extends State<CreateSensor> {
 
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
     final provider = Provider.of<CreateProviderSensor>(context);
     return Scaffold(
       appBar: CustomBar(
@@ -42,47 +44,89 @@ class _CreateSensorState extends State<CreateSensor> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                GestureDetector(
-                  onTap: () async {
-                    var image = await getPhoto.showChoiceDialog(context);
-                    if (image != null) {
-                      provider.setImage = image;
-                    }
-                  },
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.blue,
-                      shape: BoxShape.circle,
-                    ),
-                    height: 150,
-                    width: 150,
-                    child: provider.image == null
-                        ? Icon(Icons.camera, color: Colors.white, size: 40)
-                        : Image.file(
-                            provider.image,
-                            fit: BoxFit.cover,
+                Form(
+                  key: _formKey,
+                  child: Column(
+                    children: [
+                      GestureDetector(
+                        onTap: () async {
+                          var image = await getPhoto.showChoiceDialog(context);
+                          if (image != null) {
+                            provider.setImage = image;
+                          }
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Colors.blue,
+                            shape: BoxShape.circle,
                           ),
+                          height: 150,
+                          width: 150,
+                          child: provider.image == null
+                              ? Icon(Icons.camera,
+                                  color: Colors.white, size: 40)
+                              : Image.file(
+                                  provider.image,
+                                  fit: BoxFit.cover,
+                                ),
+                        ),
+                      ),
+                      SizedBox(height: 20.0),
+                      Row(
+                        children: [
+                          Container(
+                              width: width * 0.20,
+                              child: Text("Tipo de Sensor: ")),
+                          Expanded(
+                            child: CustomDropwDownList(
+                              validator: "Tipo de Sensor (?)",
+                              data: [
+                                "Sensor de Temperatura",
+                                "Sensor de Oxígeno",
+                                "Sensor de PH",
+                                "Sensor de Nivel de Agua"
+                              ],
+                              provider: provider.tipoSensor,
+                              functionChange: (value) {
+                                provider.setTipoSensor = value;
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 20.0),
+                      Row(children: [
+                        Container(
+                            width: width * 0.20,
+                            child: Text("Resistente al Agua: ")),
+                        Expanded(
+                          child: CustomDropwDownList(
+                            validator: "Resistente al Agua (?)",
+                            data: [
+                              "Sí",
+                              "No",
+                            ],
+                            provider: provider.resistenciaAgua,
+                            functionChange: (value) {
+                              provider.setResistencia = value;
+                            },
+                          ),
+                        )
+                      ]),
+                      SizedBox(height: 20.0),
+                      CustomInputField(
+                          controller: provider.textReferencia,
+                          label: "Referencia",
+                          inputType: TextInputType.text,
+                          icono: Icons.receipt),
+                    ],
                   ),
-                ),
-                SizedBox(height: 20.0),
-                CustomDropwDownList(
-                  validator: "Tipo de Sensor (?)",
-                  data: [
-                    "Sensor de Temperatura",
-                    "Sensor de Oxígeno",
-                    "Sensor de PH",
-                    "Sensor de Nivel de Agua"
-                  ],
-                  provider: provider.tipoSensor,
-                  functionChange: (value) {
-                    provider.setTipoSensor = value;
-                  },
                 ),
                 SizedBox(height: 20.0),
                 if (provider.tipoSensor == "Sensor de Temperatura") ...{
                   Container(
                     color: Colors.grey[200],
-                    width: provider.widthTemperatura,
+                 
                     child: Form(
                       key: _formKeyTemperatura,
                       child: Column(
@@ -107,7 +151,12 @@ class _CreateSensorState extends State<CreateSensor> {
                           SizedBox(height: 20.0),
                           CustomButton(
                             function: () => controller.createSensorTemperatura(
-                                context, _formKeyTemperatura, provider),
+                             
+                                
+                                context,
+                                _formKeyTemperatura,
+                                _formKey,
+                                provider),
                             customColor: Color(0xFF242424),
                             title: "Guardar Sensor",
                             scrWidth: double.infinity * 0.90,

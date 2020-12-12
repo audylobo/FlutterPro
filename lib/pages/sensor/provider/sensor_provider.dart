@@ -1,12 +1,18 @@
 import 'dart:io';
 
+
 import 'package:flutter/cupertino.dart';
 
 class CreateProviderSensor with ChangeNotifier {
 
 
   File _image;
-  String _tipoSensor = "Seleccionar";
+  String _tipoSensor      = "Seleccionar";
+  String _resistenciaAgua = "Seleccionar";
+
+
+
+   TextEditingController textReferencia                 = new TextEditingController();
 
   // SENSOR DE TEMPERATURA
   TextEditingController textCONSUMOTemperatura          = new TextEditingController();
@@ -36,17 +42,6 @@ class CreateProviderSensor with ChangeNotifier {
 
 
 
-  // WIDTH DE CONTAINERRSSS
-  double _widthTemperatura = double.infinity;
-
-  get widthTemperatura {
-    return _widthTemperatura;
-  }
-
-  set setwidthTemperatura(double dato) {
-    this._widthTemperatura = dato + this._widthTemperatura;
-  }
-
   get image {
     return _image;
   }
@@ -62,11 +57,21 @@ class CreateProviderSensor with ChangeNotifier {
 
   set setTipoSensor(String dato) {
     this._tipoSensor = dato;
-    notifyListeners();
+   notifyListeners(); 
+  }
+
+    get resistenciaAgua {
+    return _resistenciaAgua;
+  }
+
+  set setResistencia(String dato) {
+    this._resistenciaAgua = dato;
+     notifyListeners(); 
   }
 
   void clearText(){
 
+    textReferencia               .clear();
     textCONSUMOTemperatura       .clear();
     textPRECIOTemperatura        .clear();
     textTEMPERATURATOLERABLE     .clear();
@@ -85,6 +90,8 @@ class CreateProviderSensor with ChangeNotifier {
     textFrecuenciaAgua           .clear();
     textCorrienteAgua            .clear();
     this.setImage= null;
+    this.setTipoSensor  = "Seleccionar";
+    this.setResistencia = "Seleccionar";
     
 
 

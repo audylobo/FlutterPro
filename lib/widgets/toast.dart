@@ -10,6 +10,7 @@ class CustomToast {
     Color textcolor,
   ) {
     Fluttertoast.showToast(
+
       msg: mensaje,
       toastLength: Toast.LENGTH_LONG,
       gravity: ToastGravity.CENTER,
@@ -23,4 +24,6 @@ class CustomToast {
   cerrar() async {
     await Fluttertoast.cancel().then((isHidden) {});
   }
+
+  
 }

@@ -35,9 +35,10 @@ class CustomDropwDownList extends StatelessWidget {
           ),
           isExpanded: true,
           validator: (value) {
-            if (value == "Seleccionar") {
+            if (provider == "Seleccionar") {
               return '' + validator.toString();
             }
+            print(value);
             return null;
           },
           // underline: Container(),

@@ -34,6 +34,7 @@ class GetPhoto {
                     onTap: () async {
                       var picture = await openGallery(context);
                       Navigator.of(context).pop(picture);
+                    
                     },
                   ),
                   Padding(
@@ -41,7 +42,7 @@ class GetPhoto {
                   ),
                   GestureDetector(
                     child: Text("Camera"),
-                    onTap: ()async  {
+                    onTap: () async  {
                       var picture = await  openCamera(context);
                       Navigator.of(context).pop(picture);
                     },

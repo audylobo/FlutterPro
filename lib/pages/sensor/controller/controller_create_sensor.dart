@@ -10,29 +10,32 @@ class ControllerCreateSensor {
 
   GetPhoto getPhoto = new GetPhoto();
 
-  void createSensorTemperatura(BuildContext context,
-      GlobalKey<FormState> formkey, CreateProviderSensor provider) async {
+  void createSensorTemperatura(BuildContext context, GlobalKey<FormState> formkey,GlobalKey<FormState> _formKeyFORM, CreateProviderSensor provider) async {
     try {
-      if (formkey.currentState.validate()) {
+      if(_formKeyFORM.currentState.validate( )&& formkey.currentState.validate() && provider.image!= null ){
+       
         //validacion del form
         Firestore.instance.collection("sensor temperatura").document().setData({
           //se crea la tupla del SENSOR
 
           //MAP DE DOCUMENTO
-
-          "consumo": provider.textCONSUMOTemperatura.text.trim(),
-          "precio": provider.textPRECIOTemperatura.text.trim(),
-          "temperatura": provider.textTEMPERATURATOLERABLE.text.trim(),
-         "url_image": await getPhoto.getUrlImage(provider.image)
+         "resistencia_agua":  provider.resistenciaAgua,
+         "referencia":        provider.textReferencia.text.trim(),
+         "consumo":           provider.textCONSUMOTemperatura.text.trim(),
+         "precio":            provider.textPRECIOTemperatura.text.trim(),
+         "temperatura":       provider.textTEMPERATURATOLERABLE.text.trim(),
+         "url_image":         await getPhoto.getUrlImage(provider.image)
         
         }).then((value) {
           toast.show("Sensor registrado", Colors.blue[900], Colors.white);
           provider.clearText();
           // Navigator.pushNamed(context, Routes.bibliotecarioHome); // navegacion a la pantalla de home.
         });
-      } else {
+      
+      }else {
         toast.show("Completa todos los datos", Colors.red, Colors.white);
       }
+     
     } catch (event) {
       print(event.toString());
       toast.show(event.toString(), Colors.red, Colors.white);
@@ -44,6 +47,8 @@ class ControllerCreateSensor {
     try {
       if (formkey.currentState.validate()) {
         Firestore.instance.collection("sensor oxigeno").document().setData({
+          "resistencia_agua":  provider.resistenciaAgua,
+           "referencia":  provider.textReferencia.text.trim(),
           "voltaje": provider.textVOLTAJE.text.trim(),
           "precio": provider.textPrecioVoltaje.text.trim(),
           "deteccion": provider.textRangoDeteccionVoltaje.text.trim(),
@@ -68,6 +73,8 @@ class ControllerCreateSensor {
     try {
       if (formkey.currentState.validate()) {
         Firestore.instance.collection("sensor ph").document().setData({
+          "resistencia_agua":  provider.resistenciaAgua,
+           "referencia":  provider.textReferencia.text.trim(),
           "voltaje": provider.textVOLTAJEPH.text.trim(),
           "medicion": provider.textMEDICIONPH.text.trim(),
           "temperatura_tolerable":
@@ -94,12 +101,14 @@ class ControllerCreateSensor {
     try {
       if (formkey.currentState.validate()) {
         Firestore.instance.collection("sensor agua").document().setData({
+          "resistencia_agua":  provider.resistenciaAgua,
+          "referencia":  provider.textReferencia.text.trim(),
           "voltaje": provider.textVOLTAJEAgua.text.trim(),
           "precio": provider.textPrecioAgua.text.trim(),
           "distancia": provider.textDistanciaAgua.text.trim(),
           "frecuencia": provider.textFrecuenciaAgua.text.trim(),
           "corriente": provider.textCorrienteAgua.text.trim(),
-           "url_image": await getPhoto.getUrlImage(provider.image)
+          "url_image": await getPhoto.getUrlImage(provider.image)
         
         }).then((value) {
           toast.show("Sensor registrado", Colors.blue[900], Colors.white);

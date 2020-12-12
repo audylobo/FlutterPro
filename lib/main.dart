@@ -35,7 +35,7 @@ class _MyAppState extends State<MyApp> {
       
     return MultiProvider(
       providers: [
-         ListenableProvider<CreateProviderSensor>(create: (_) => CreateProviderSensor()),
+        ListenableProvider<CreateProviderSensor>(create: (_) => CreateProviderSensor()),
         ChangeNotifierProvider<PushNotificationService>(create: (context) => pushProvider, ),
         StreamProvider.value(value: AuthService().user),
       ],
