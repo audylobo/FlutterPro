@@ -1,4 +1,5 @@
 import 'package:drawer_menu/models/sensores/temperatura.dart';
+import 'package:drawer_menu/pages/sensor/widgets/list_sensor_temperatura.dart';
 import 'package:drawer_menu/routes.dart';
 import 'package:drawer_menu/services/streams/stream_sensor_temperatura.dart';
 import 'package:flutter/material.dart';
@@ -14,21 +15,62 @@ class _SensorState extends State<Sensor> {
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
 
-  static StreamSensorTemperatura sensorTemperaturaProvider =  new StreamSensorTemperatura();
+  StreamSensorTemperatura sensorTemperaturaProvider =
+      new StreamSensorTemperatura();
 
   void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
+    _selectedIndex = index;
+   
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+   
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    print("DISPOSE");
+     sensorTemperaturaProvider?.disposeStreams();
+
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    sensorTemperaturaProvider.getPopulares();
+   sensorTemperaturaProvider.getPopulares();
+   
     return Scaffold(
-      body: Center(
-        child: _widgetOptions[_selectedIndex],
-      ),
+      body: [
+        StreamBuilder<List<SensorTemperatura>>(
+          stream: sensorTemperaturaProvider.popularesStream,
+          builder: (BuildContext context,
+              AsyncSnapshot<List<SensorTemperatura>> snapshot) {
+            if (snapshot.hasData) {
+              List<SensorTemperatura> list = snapshot.data;
+              return ListSensorTemperatura(
+                array: list,
+              );
+            } else {
+              return Center(child: CircularProgressIndicator());
+            }
+          },
+        ),
+        Text(
+          'Sensor de oxigeno',
+          style: optionStyle,
+        ),
+        Text(
+          'Sensor de Ph',
+          style: optionStyle,
+        ),
+        Text(
+          'Sensor de nivel de agua',
+          style: optionStyle,
+        ),
+      ][_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
@@ -60,29 +102,4 @@ class _SensorState extends State<Sensor> {
       ),
     );
   }
-
-  List<Widget> _widgetOptions = <Widget>[
-    StreamBuilder<List<SensorTemperatura>>(
-      stream: sensorTemperaturaProvider.popularesStream,
-      builder: (BuildContext context, AsyncSnapshot<List<SensorTemperatura>> snapshot) {
-        if (snapshot.hasData) {
-          return Text(snapshot.data.toString());
-        } else {
-          return Center(child: CircularProgressIndicator());
-        }
-      },
-    ),
-    Text(
-      'Sensor de oxigeno',
-      style: optionStyle,
-    ),
-    Text(
-      'Sensor de Ph',
-      style: optionStyle,
-    ),
-    Text(
-      'Sensor de nivel de agua',
-      style: optionStyle,
-    ),
-  ];
 }
