@@ -11,14 +11,14 @@ class SensorTemperatura {
   String temperatura;
   String urlimage;
 
-  SensorTemperatura({
+/*   SensorTemperatura({
     this.resistenciaagua,
     this.referencia,
     this.consumo,
     this.precio,
     this.temperatura,
     this.urlimage,
-  });
+  }); */
   String toJson() => json.encode(toMap());
 
   Map<String, dynamic> toMap() => {

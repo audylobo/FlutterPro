@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:drawer_menu/models/sensor_model.dart';
-import 'package:drawer_menu/pages/lakes/add_lake.dart';
+import 'package:drawer_menu/pages/lakes/pages/add_lake.dart';
 import 'package:drawer_menu/services/database_service.dart';
 import 'package:drawer_menu/services/sensor_service.dart';
 import 'package:flutter/material.dart';

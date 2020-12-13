@@ -1,3 +1,5 @@
+import 'package:drawer_menu/pages/lakes/provider/sensorOxigeno_provider.dart';
+import 'package:drawer_menu/pages/lakes/provider/sensorTemperatura_provider.dart';
 import 'package:drawer_menu/routes.dart';
 import 'package:drawer_menu/services/push_service.dart';
 import 'package:drawer_menu/utils/wraper.dart';
@@ -8,10 +10,10 @@ import 'package:provider/provider.dart';
 
 import 'package:drawer_menu/services/auth_service.dart';
 
-
 import 'menu/sensor.dart';
+import 'pages/lakes/provider/sensorAgua_provider.dart';
+import 'pages/lakes/provider/sensorPh_provider.dart';
 import 'pages/sensor/provider/sensor_provider.dart';
-
 
 void main() => runApp(MyApp());
 
@@ -21,24 +23,26 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  final pushProvider = new PushNotificationService(); 
-  
-  
+  final pushProvider = new PushNotificationService();
 
   @override
   void initState() {
-    super.initState();    
+    super.initState();
     pushProvider.initNotifications();
   }
 
   @override
   Widget build(BuildContext context) {
-      
     return MultiProvider(
       providers: [
+         ChangeNotifierProvider(create: (_) => SensorOxigenoProvider()),
+        ChangeNotifierProvider(create: (_) => SensorAguaProvider()),
+          ChangeNotifierProvider(create: (_) => SentorTemperaturaProvider()),
+         ChangeNotifierProvider(create: (_) => SensorPhProvider()),
         ChangeNotifierProvider(create: (_) => Person()),
         ListenableProvider<CreateProviderSensor>(create: (_) => CreateProviderSensor()),
-        ChangeNotifierProvider<PushNotificationService>(create: (context) => pushProvider, ),
+        ChangeNotifierProvider<PushNotificationService>(create: (context) => pushProvider,
+        ),
         StreamProvider.value(value: AuthService().user),
       ],
       child: MaterialApp(
@@ -46,7 +50,7 @@ class _MyAppState extends State<MyApp> {
         debugShowCheckedModeBanner: false,
         home: Wrapper(),
         onGenerateRoute: Routes.generateRoute,
-      /*   routes: <String, WidgetBuilder>  {        
+        /*   routes: <String, WidgetBuilder>  {        
           '/report':  (BuildContext context) => new Report(),
           Help.routeName:  (BuildContext context) => new Help(),
           FishPrincipal.routeName: (BuildContext context) => new FishPrincipal(),
@@ -58,7 +62,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   @override
-  void dispose() { 
+  void dispose() {
     pushProvider.closeStream();
     super.dispose();
   }

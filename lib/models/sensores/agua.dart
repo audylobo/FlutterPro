@@ -39,7 +39,7 @@ class SensorAgua {
         voltaje = docs['voltaje'],
         urlimage = docs['url_image'];
 
-  List<SensorAgua> toSensorTemperaturaList(QuerySnapshot query) {
+  static List<SensorAgua> toSensorAguaList(QuerySnapshot query) {
     return query.documents.map((doc) => SensorAgua.fromSnapshot(doc)).toList();
   }
 }
