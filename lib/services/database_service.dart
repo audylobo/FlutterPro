@@ -152,7 +152,8 @@ class DatabaseService {
   */
 
   Future<List<DocumentSnapshot>> getReportList() {
-    return reportDataCollection.orderBy('createdDate',  descending: true)
+    return reportDataCollection
+        .orderBy('createdDate', descending: true)
         .getDocuments()
         .then((snapshot) => snapshot.documents);
   }

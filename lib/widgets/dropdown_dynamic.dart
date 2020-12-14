@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:drawer_menu/models/fish.dart';
 import 'package:flutter/material.dart';
 
 import 'container_blue.dart';
@@ -24,17 +25,10 @@ class DynamicCustomDropwDownList extends StatelessWidget {
         style: TextStyle(color: Colors.black),
         items: snapshot
             .map((data) => DropdownMenuItem<dynamic>(
-                  child: ListTile(
-                    leading: CachedNetworkImage(
-                      imageUrl: data.urlimage,
-                      placeholder: (context, url) =>
-                          CircularProgressIndicator(),
-                      height: 50,
-                      width: 50,
-                      fit: BoxFit.cover,
-                    ),
-                    title: Text(data.referencia),
-                  ),
+                  child: data is FishListOrigin
+                      ? Text(data.categoria)
+                      : dataReferencia(data),
+                
                   value: data,
                 ))
             .toList(),
@@ -51,4 +45,19 @@ class DynamicCustomDropwDownList extends StatelessWidget {
       ),
     ));
   }
+
+  Widget dataReferencia(dynamic data) {
+    return ListTile(
+      leading: CachedNetworkImage(
+        imageUrl: data.urlimage,
+        placeholder: (context, url) => CircularProgressIndicator(),
+        height: 50,
+        width: 50,
+        fit: BoxFit.cover,
+      ),
+      title: Text(data.referencia),
+    );
+  }
+
+  Widget fishImg() {}
 }
