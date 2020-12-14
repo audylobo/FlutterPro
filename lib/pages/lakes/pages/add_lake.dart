@@ -1,13 +1,14 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:drawer_menu/models/fish.dart';
-import 'package:drawer_menu/models/fish_model.dart';
+
 import 'package:drawer_menu/models/lake_model.dart';
 import 'package:drawer_menu/models/sensores/agua.dart';
 import 'package:drawer_menu/models/sensores/oxigeno.dart';
 import 'package:drawer_menu/models/sensores/ph.dart';
 import 'package:drawer_menu/models/sensores/temperatura.dart';
-import 'package:drawer_menu/pages/fishes/fishP.dart';
+import 'package:drawer_menu/pages/lakes/provider/fish_detail_provider.dart';
+
 import 'package:drawer_menu/pages/lakes/provider/fishorigin_provider.dart';
 import 'package:drawer_menu/pages/lakes/provider/sensorAgua_provider.dart';
 import 'package:drawer_menu/pages/lakes/provider/sensorOxigeno_provider.dart';
@@ -15,50 +16,27 @@ import 'package:drawer_menu/pages/lakes/provider/sensorPh_provider.dart';
 import 'package:drawer_menu/pages/lakes/provider/sensorTemperatura_provider.dart';
 import 'package:drawer_menu/pages/lakes/provider/sensores_providers.dart';
 import 'package:drawer_menu/pages/lakes/widgets/textformfield.dart';
-import 'package:drawer_menu/services/database_service.dart';
 
 import 'package:drawer_menu/services/streams/stream_sensor_temperatura.dart';
 import 'package:drawer_menu/widgets/appbar.dart';
 import 'package:drawer_menu/widgets/dropdown_dynamic.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+
 import 'package:provider/provider.dart';
 
-class AddLakePage extends StatefulWidget {
-  final String lakeId;
-  final bool isEditing;
-  final Map<String, dynamic> lakeData;
+import '../../../services/database_service.dart';
 
-  const AddLakePage(
-      {Key key, this.lakeId, this.isEditing = false, this.lakeData})
-      : super(key: key);
-
-  @override
-  _AddLakePageState createState() => _AddLakePageState();
-}
-
-class _AddLakePageState extends State<AddLakePage> {
+// ignore: must_be_immutable
+class AddLagePageCreate extends StatelessWidget {
   LakeModel lakeModel = new LakeModel();
   StreamSensorTemperatura futures = new StreamSensorTemperatura();
   SensorProvidersData sensorProvider = new SensorProvidersData();
 
   @override
-  void initState() {
-    super.initState();
-    if (widget.isEditing) {
-      lakeModel = new LakeModel(
-          lakeName: widget.lakeData['lakeName'],
-          oxigenSendorId: widget.lakeData['oxigen_sendorId'],
-          phSensorId: widget.lakeData['ph_sensorId'],
-          tempSensorId: widget.lakeData['temp_sensorId'],
-          waterLevelSensorId: widget.lakeData['waterLevel_sensorId']);
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
-    final fishOriginProvider = Provider.of<FishOriginProvider>(context);
+    // final myFishCategory = Provider.of<FishOriginProvider>(context);
     return Scaffold(
         appBar: CustomBar(
           title: "Crear Lago",
@@ -395,12 +373,9 @@ class _AddLakePageState extends State<AddLakePage> {
                         child: Text("P e c e s",
                             style: TextStyle(color: Colors.white)),
                       ),
-                      StreamBuilder(
-                          stream: Firestore.instance
-                              .collection('fish')
-                              .snapshots()
-                              .map(FishListOrigin.toFishList),
-                          builder: (BuildContext _, AsyncSnapshot snapshot) {
+                      FutureBuilder(
+                          future: futures.getCategoriaPeces(),
+                          builder: (_, AsyncSnapshot snapshot) {
                             if (!snapshot.hasData) {
                               return Center(child: CircularProgressIndicator());
                             }
@@ -408,74 +383,74 @@ class _AddLakePageState extends State<AddLakePage> {
                             List<FishListOrigin> list = snapshot.data;
 
                             return Consumer<FishOriginProvider>(
-                                builder: (__, providerFishOrigin, _) {
+                                builder: (__, lakeCategoriaProvider, _) {
                               return DynamicCustomDropwDownList(
                                 snapshot: list,
-                                textMostrado: providerFishOrigin.textCategoria,
+                                textMostrado:
+                                    lakeCategoriaProvider.textCategoria,
                                 functionChange: (value) {
-                                  providerFishOrigin.setCategoria = value;
+                                  lakeCategoriaProvider.setCategoria = value;
                                 },
                               );
                             });
                           }),
-                      FutureBuilder(
-                        future: DatabaseService(null)
-                            .getFishList(fishOriginProvider.textCategoria),
-                        initialData: new List<DocumentSnapshot>(),
-                        builder: (BuildContext context,
-                            AsyncSnapshot<List<DocumentSnapshot>> snapshot) {
-                          if (snapshot.connectionState ==
-                              ConnectionState.done) {
-                            if (snapshot.data.length == 0) {
-                              return Center(
-                                  child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: <Widget>[
-                                  ClipRRect(
-                                    borderRadius: BorderRadius.circular(100.0),
-                                    child: Image.asset(
-                                      'assets/images/fish-loading.gif',
-                                      width: 100.0,
+                      SizedBox(height:5.0),
+                      Consumer<FishOriginProvider>(
+                          builder: (__, myFishProviderCategory, _) {
+                        return FutureBuilder(
+                          future: DatabaseService(null).getFishList(
+                              myFishProviderCategory.textCategoria),
+                          initialData: new List<DocumentSnapshot>(),
+                          builder: (BuildContext context,
+                              AsyncSnapshot<List<DocumentSnapshot>> snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.done) {
+                              if (snapshot.data.length == 0) {
+                                return Center(
+                                    child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[
+                                    ClipRRect(
+                                      borderRadius:
+                                          BorderRadius.circular(100.0),
+                                      child: Image.asset(
+                                        'assets/images/fish-loading.gif',
+                                        width: 100.0,
+                                      ),
                                     ),
-                                  ),
-                                  SizedBox(
-                                    height: 20.0,
-                                  ),
-                                  Text('No se encontraron resultados')
-                                ],
+                                    SizedBox(
+                                      height: 20.0,
+                                    ),
+                                    Text('No se encontraron resultados')
+                                  ],
+                                ));
+                              }
+
+                              List<DetailFishModel> array = snapshot.data.map((doc) 
+                              => DetailFishModel.fromSnapshot(doc)).toList();
+
+                              
+                                return Consumer<FishDetailProvider>(
+                                builder: (__, fishDetailProvider, _) {
+                              return DynamicCustomDropwDownList(
+                                snapshot: array,
+                                textMostrado:
+                                    fishDetailProvider.texto,
+                                functionChange: (value) {
+                                  fishDetailProvider.setNombrePez = value;
+                                },
+                              );
+                            }); 
+
+                            } else {
+                              return Center(
+                                  child: SpinKitCircle(
+                                color: Colors.blue,
                               ));
                             }
-
-                            return ListView.builder(
-                              shrinkWrap: true,
-                              itemCount: snapshot.data.length,
-                              itemBuilder: (BuildContext context, int index) {
-                                print(snapshot.data[index].data.toString());
-                                return ListTile(
-                                  leading: CachedNetworkImage(
-                                    imageUrl: snapshot.data[index]["img"],
-                                    placeholder: (context, url) =>
-                                        CircularProgressIndicator(),
-                                    height: 50,
-                                    width: 50,
-                                    fit: BoxFit.cover,
-                                  ),
-                                  title: Text(
-                                    snapshot.data[index]["nombreCientifico"],
-                                  ),
-                                );
-                                /* return Text(snapshot.data[index].data.toString() +
-                                      snapshot.data[index].documentID); */
-                              },
-                            );
-                          } else {
-                            return Center(
-                                child: SpinKitCircle(
-                              color: Colors.blue,
-                            ));
-                          }
-                        },
-                      )
+                          },
+                        );
+                      })
                     ]))));
   }
 

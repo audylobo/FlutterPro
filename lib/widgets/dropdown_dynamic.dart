@@ -25,9 +25,7 @@ class DynamicCustomDropwDownList extends StatelessWidget {
         style: TextStyle(color: Colors.black),
         items: snapshot
             .map((data) => DropdownMenuItem<dynamic>(
-                  child: data is FishListOrigin
-                      ? Text(data.categoria)
-                      : dataReferencia(data),
+                  child: dataReferencia(data),
                 
                   value: data,
                 ))
@@ -47,7 +45,14 @@ class DynamicCustomDropwDownList extends StatelessWidget {
   }
 
   Widget dataReferencia(dynamic data) {
-    return ListTile(
+
+    if (data is FishListOrigin) {
+      return Text(data.categoria);
+    } else if (data is DetailFishModel){
+      return Text(data.nombrePez);
+    
+    }else {
+      return ListTile(
       leading: CachedNetworkImage(
         imageUrl: data.urlimage,
         placeholder: (context, url) => CircularProgressIndicator(),
@@ -57,6 +62,13 @@ class DynamicCustomDropwDownList extends StatelessWidget {
       ),
       title: Text(data.referencia),
     );
+
+
+    }
+
+
+
+    
   }
 
   Widget fishImg() {}

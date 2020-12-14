@@ -11,6 +11,7 @@ import 'package:provider/provider.dart';
 import 'package:drawer_menu/services/auth_service.dart';
 
 import 'menu/sensor.dart';
+import 'pages/lakes/provider/fish_detail_provider.dart';
 import 'pages/lakes/provider/fishorigin_provider.dart';
 import 'pages/lakes/provider/sensorAgua_provider.dart';
 import 'pages/lakes/provider/sensorPh_provider.dart';
@@ -36,6 +37,7 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+          ChangeNotifierProvider(create: (_) => FishDetailProvider()),
         ChangeNotifierProvider(create: (_) => SensorOxigenoProvider()),
         ChangeNotifierProvider(create: (_) => SensorAguaProvider()),
         ChangeNotifierProvider(create: (_) => SentorTemperaturaProvider()),

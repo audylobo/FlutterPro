@@ -8,6 +8,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+import '../pages/lakes/pages/add_lake.dart';
+import '../pages/lakes/pages/add_lake.dart';
+import '../pages/lakes/pages/add_lake.dart';
+import '../pages/lakes/pages/add_lake.dart';
+
 class Lagos extends StatefulWidget {
   static const String routeName = "/lagos";
 
@@ -32,10 +37,7 @@ class _LagosState extends State<Lagos> {
         floatingActionButton: FloatingActionButton(
             child: Icon(Icons.add),
             onPressed: () {
-              Navigator.push(
-                  context,
-                  new MaterialPageRoute(
-                      builder: (context) => new AddLakePage()));
+             Navigator.push(context, MaterialPageRoute(builder: (context) => AddLagePageCreate()));
             }),
         body: RefreshIndicator(
           onRefresh: () async {
@@ -105,10 +107,10 @@ class _LagosState extends State<Lagos> {
             ],
         onSelected: (value) {
           if (value == 'edit') {
-            Navigator.push(
+          /*   Navigator.push(
                   context,
                   new MaterialPageRoute(
-                      builder: (context) => new AddLakePage(isEditing: true, lakeData: data, lakeId: id ,)));
+                      builder: (context) =>  AddLakePage())); */
           } else {
             DatabaseService(null)
                   .deleteLake(id)

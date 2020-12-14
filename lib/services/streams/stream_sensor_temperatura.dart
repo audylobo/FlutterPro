@@ -7,7 +7,23 @@ import 'package:drawer_menu/models/sensores/oxigeno.dart';
 import 'package:drawer_menu/models/sensores/ph.dart';
 import 'package:drawer_menu/models/sensores/temperatura.dart';
 
+import '../../models/fish.dart';
+
 class StreamSensorTemperatura {
+
+    Future<List<FishListOrigin>> getCategoriaPeces() async {
+    QuerySnapshot querySnapShot =
+        await Firestore.instance.collection('fish').getDocuments();
+
+    List<FishListOrigin> array = querySnapShot.documents
+        .map((doc) => FishListOrigin.fromSnapshot(doc))
+        .toList();
+    print(array);
+
+    return array;
+  }
+
+
   Future<List<SensorTemperatura>> getSensoresTemperatura() async {
     QuerySnapshot querySnapShot = await Firestore.instance
         .collection('sensor temperatura')
