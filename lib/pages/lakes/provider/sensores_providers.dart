@@ -19,4 +19,10 @@ class SensorProvidersData{
   TextEditingController maxSensorPh = new TextEditingController();
   TextEditingController maxSensorAgua = new TextEditingController();
 
+
+
+
+
+  TextEditingController cantidadPeces = new TextEditingController();
+
 }

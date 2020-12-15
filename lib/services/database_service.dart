@@ -54,7 +54,7 @@ class DatabaseService {
   }
 
   // Create new fish in selected category
-  Future createNewFish(String category, DetailFishModel fishData) {
+  Future createNewFish(String category, DetallePez fishData) {
     return fishDataCollection
         .document(category)
         .collection('Content')
@@ -64,7 +64,7 @@ class DatabaseService {
 
   // Edit existent fish in selected category
   Future editFish(
-      String category, String fishDocumentId, DetailFishModel fishData) {
+      String category, String fishDocumentId, DetallePez fishData) {
     return fishDataCollection
         .document(category)
         .collection('Content')

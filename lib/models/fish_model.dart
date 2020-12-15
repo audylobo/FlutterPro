@@ -5,7 +5,7 @@ class FishModel {
   FishModel({this.documentID, this.data});
 }
 
-class DetailFishModel {
+class DetallePez {
   String nombrePez;
   String nombreEspecie;
   String nombreCientifico;
@@ -19,7 +19,7 @@ class DetailFishModel {
 
   Detalle detalle;
 
-  DetailFishModel(
+  DetallePez(
       {this.nombrePez = '',
       this.nombreEspecie = '',
       this.nombreCientifico = '',

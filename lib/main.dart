@@ -37,6 +37,9 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        
+           ChangeNotifierProvider(create: (_) => ListFishLakeProvider()),
+        ChangeNotifierProvider(create: (_) => DateProvider()),
           ChangeNotifierProvider(create: (_) => FishDetailProvider()),
         ChangeNotifierProvider(create: (_) => SensorOxigenoProvider()),
         ChangeNotifierProvider(create: (_) => SensorAguaProvider()),

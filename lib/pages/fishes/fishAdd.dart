@@ -22,7 +22,7 @@ class FishAdd extends StatefulWidget {
 }
 
 class _FishAddState extends State<FishAdd> {
-  DetailFishModel fishModel = new DetailFishModel(
+  DetallePez fishModel = new DetallePez(
       detalle: new Detalle(),
       estiloVida: new EstiloVida(),
       mediciones: new Mediciones());
@@ -51,7 +51,7 @@ class _FishAddState extends State<FishAdd> {
     super.initState();
     if (widget.isEditing) {
       setState(() {
-        fishModel = new DetailFishModel(
+        fishModel = new DetallePez(
             continente: widget.fishData['continente'],
             descripcion: widget.fishData['descripcion'],
             nombrePez: widget.fishData['nombrePez'],
