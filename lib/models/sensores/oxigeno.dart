@@ -34,6 +34,15 @@ class SensorOxigeno {
         voltaje = docs['voltaje'],
         urlimage = docs['url_image'];
 
+  SensorOxigeno.fromMap(Map<String, dynamic> docs)
+      : deteccion = docs['deteccion'],
+        precio = docs['precio'],
+        precision = docs['precision'],
+        referencia = docs['referencia'],
+        resistenciaAgua = docs['resistencia_agua'],
+        voltaje = docs['voltaje'],
+        urlimage = docs['url_image'];
+
   List<SensorOxigeno> toSensorTemperaturaList(QuerySnapshot query) {
     return query.documents
         .map((doc) => SensorOxigeno.fromSnapshot(doc))

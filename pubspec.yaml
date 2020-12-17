@@ -32,8 +32,10 @@ dependencies:
   open_file: ^3.0.1
   path_provider: ^1.6.7
 
+  
 
 
+  get: ^3.23.1  
   fluttertoast: ^7.0.4
   cached_network_image: ^2.4.1
 
@@ -56,3 +58,4 @@ flutter:
     - assets/images/Pez.png
     - assets/images/p.jpg
     - assets/images/fish-loading.gif
+    - assets/images/check.png

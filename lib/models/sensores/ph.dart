@@ -28,6 +28,19 @@ class SensorPH {
         "url_image": urlimage,
       };
 
+
+
+  SensorPH.fromMap(Map<String,dynamic> docs)
+      : 
+        medicion = docs['medicion'],
+        tiempoRespuesta = docs['tiempo_respuesta'],
+        temperaturaTolerable = docs['temperatura_tolerable'],
+        precision = docs['precision'],
+        referencia = docs['referencia'],
+        resistenciaAgua = docs['resistencia_agua'],
+        voltaje = docs['voltaje'],
+        urlimage = docs['url_image'];
+
   SensorPH.fromSnapshot(DocumentSnapshot docs)
       : idSensorPH = docs.documentID,
         medicion = docs['medicion'],

@@ -11,14 +11,6 @@ class SensorTemperatura {
   String temperatura;
   String urlimage;
 
-/*   SensorTemperatura({
-    this.resistenciaagua,
-    this.referencia,
-    this.consumo,
-    this.precio,
-    this.temperatura,
-    this.urlimage,
-  }); */
   String toJson() => json.encode(toMap());
 
   Map<String, dynamic> toMap() => {
@@ -33,6 +25,14 @@ class SensorTemperatura {
   SensorTemperatura.fromSnapshot(DocumentSnapshot docs)
       : idSensorTemperatura = docs.documentID,
         resistenciaagua = docs['resistencia_agua'],
+        referencia = docs['referencia'],
+        consumo = docs['consumo'],
+        precio = docs['precio'],
+        temperatura = docs['temperatura'],
+        urlimage = docs['url_image'];
+
+  SensorTemperatura.fromMap(Map<String, dynamic> docs)
+      : resistenciaagua = docs['resistencia_agua'],
         referencia = docs['referencia'],
         consumo = docs['consumo'],
         precio = docs['precio'],

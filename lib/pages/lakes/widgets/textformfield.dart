@@ -13,6 +13,12 @@ class FormFieldLake extends StatelessWidget {
   Widget build(BuildContext context) {
 
     return TextFormField(
+       validator: (value) {
+          if (value.isEmpty) {
+            return 'Requerido';
+          }
+          return null;
+        },
       controller: controller,
       decoration: InputDecoration(
         labelText: '$labelText',

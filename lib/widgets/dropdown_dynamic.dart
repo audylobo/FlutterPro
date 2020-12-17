@@ -33,7 +33,8 @@ class DynamicCustomDropwDownList extends StatelessWidget {
         onChanged: (dynamic value) {
           functionChange(value);
         },
-        underline: Container(),
+        
+      
         isExpanded: true,
         hint: Text(
           textMostrado,
@@ -52,16 +53,8 @@ class DynamicCustomDropwDownList extends StatelessWidget {
       return Text(data.nombrePez);
     
     }else {
-      return ListTile(
-      leading: CachedNetworkImage(
-        imageUrl: data.urlimage,
-        placeholder: (context, url) => CircularProgressIndicator(),
-        height: 50,
-        width: 50,
-        fit: BoxFit.cover,
-      ),
-      title: Text(data.referencia),
-    );
+      return Text(data.referencia);
+    
 
 
     }

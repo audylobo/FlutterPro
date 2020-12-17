@@ -28,6 +28,17 @@ class SensorAgua {
         "url_image": urlimage,
       };
 
+          SensorAgua.fromMap(Map<String, dynamic> json):
+        voltaje        = json["voltaje"],
+        distancia      = json["distancia"],
+        referencia     = json["referencia"],
+        precio         = json["precio"],
+        resistenciaAgua= json["resistencia_agua"],
+        frecuencia     = json["frecuencia"],
+        urlimage       = json["url_image"],
+        corriente      = json["corriente"];
+    
+
   SensorAgua.fromSnapshot(DocumentSnapshot docs)
       : idSensorAgua = docs.documentID,
         frecuencia = docs['frecuencia'],
