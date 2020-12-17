@@ -53,7 +53,7 @@ class MySuperLago extends GetxController {
   int minimosensorTemperatura;
   int maximosensorTemperatura;
 
-  int actualSensorTemperatura;
+  int actualSensorTemperatura =0;
   int actualSensorPh;
   int actualSensorAgua;
   int actualSensorOxigeno;
@@ -100,7 +100,7 @@ class MySuperLago extends GetxController {
       title: Text("$title"),
       content: Container(
         width: Get.context.width * 0.80,
-        
+        height: 300,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -172,7 +172,7 @@ class MySuperLago extends GetxController {
           onPressed: () {
             Get.back();
           },
-          child: Text("ok"),
+          child: Text("OK"),
         )
       ],
     ));

@@ -4,7 +4,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:drawer_menu/models/mysuperlago.dart';
 import 'package:drawer_menu/pages/lakes/pages/add_lake.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import '../pages/lakes/pages/add_lake.dart';
 import 'provider/lake_provider.dart';
@@ -17,6 +19,8 @@ class Lagos extends StatefulWidget {
 }
 
 class _LagosState extends State<Lagos> {
+  final formatter = DateFormat('yyyy/MM/dd HH:mm a');
+
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -46,101 +50,219 @@ class _LagosState extends State<Lagos> {
 
             return ListView.builder(
               itemCount: myLista.length,
-              itemBuilder: (context, index) {
-                return Column(
-                  children: [
-                    Row(
+              shrinkWrap: true,
+              itemBuilder: (_, index) {
+                return ListTile(
+
+                    leading: Icon(FontAwesomeIcons.water,
+                        color: Colors.blue, size: 50.0),
+                    subtitle: Column(
                       children: [
-                        Container(
-                          width: width * 0.25,
-                          height: 120.0,
-                          color: Colors.red,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(myLista[index].nombreLago),
-                              Text("Nivel de Oxigeno"),
-                              Text("Nivel de pH"),
-                              Text("Nivel de Agua")
-                            ],
-                          ),
+                        Table(
+                          defaultColumnWidth: FixedColumnWidth(80.0),
+                          children: [
+                            TableRow(children: [
+                              Text('Lago ' + (index + 1).toString(),
+                                  style: TextStyle(
+                                      fontSize: 20.0, color: Colors.green)),
+                              Text('MIN',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontSize: 15.0,
+                                      color: Colors.indigo[900])),
+                              Text('ACTUAL',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(fontSize: 15.0)),
+                              Text('MAX',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontSize: 15.0, color: Colors.red)),
+                            ]),
+                            TableRow(children: [
+                              Text('Temperatura'),
+                              Text(
+                                  myLista[index]
+                                          .minimosensorTemperatura
+                                          .toString() +
+                                      " C",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(color: Colors.indigo[900])),
+                              GetBuilder<MySuperLago>(
+                                  init: myLista[index],
+                                  builder: (mySuperController) => Column(
+                                        children: [
+                                          if (myLista[index]
+                                                  .actualSensorTemperatura ==
+                                              0) ...{
+                                            GestureDetector(
+                                              onTap: () {
+                                                myLista[index].increment();
+                                              },
+                                              child: Icon(Icons.add),
+                                            ),
+                                          } else ...{
+                                            Text(
+                                              myLista[index]
+                                                  .actualSensorTemperatura
+                                                  .toString(),
+                                              textAlign: TextAlign.center,
+                                            ),
+                                          }
+                                        ],
+                                      )),
+                              Text(
+                                  myLista[index]
+                                          .maximosensorTemperatura
+                                          .toString() +
+                                      " C",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(color: Colors.red)),
+                            ]),
+                            TableRow(children: [
+                              Text('Nivel de Oxigeno'),
+                              Text(
+                                  myLista[index].minSensorOxigeno.toString() +
+                                      "%",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(color: Colors.indigo[900])),
+                              GetBuilder<MySuperLago>(
+                                  init: myLista[index],
+                                  builder: (mySuperController) => Column(
+                                        children: [
+                                          if (myLista[index]
+                                                  .actualSensorTemperatura ==
+                                              0)
+                                            ...{}
+                                          else ...{
+                                            Text(
+                                              myLista[index]
+                                                  .actualSensorOxigeno
+                                                  .toString(),
+                                              textAlign: TextAlign.center,
+                                            ),
+                                          }
+                                        ],
+                                      )),
+                              Text(
+                                  myLista[index].maxSensorOxigeno.toString() +
+                                      "%",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(color: Colors.red)),
+                            ]),
+                            TableRow(children: [
+                              Text('Nivel de Ph '),
+                              Text(
+                                  myLista[index].minimosensorPh.toString() +
+                                      " PH",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(color: Colors.indigo[900])),
+                              GetBuilder<MySuperLago>(
+                                  init: myLista[index],
+                                  builder: (mySuperController) => Column(
+                                        children: [
+                                          if (myLista[index]
+                                                  .actualSensorTemperatura ==
+                                              0)
+                                            ...{}
+                                          else ...{
+                                            Text(
+                                              myLista[index]
+                                                  .actualSensorPh
+                                                  .toString(),
+                                              textAlign: TextAlign.center,
+                                            ),
+                                          }
+                                        ],
+                                      )),
+                              Text(
+                                  myLista[index].maximosensorPh.toString() +
+                                      " PH",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(color: Colors.red)),
+                            ]),
+                            TableRow(children: [
+                              Text('Nivel de Agua '),
+                              Text(
+                                  myLista[index].minimoSensorAgua.toString() +
+                                      " CM",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(color: Colors.indigo[900])),
+                              GetBuilder<MySuperLago>(
+                                  init: myLista[index],
+                                  builder: (mySuperController) => Column(
+                                        children: [
+                                          if (myLista[index]
+                                                  .actualSensorTemperatura ==
+                                              0)
+                                            ...{}
+                                          else ...{
+                                            Text(
+                                              myLista[index]
+                                                  .actualSensorAgua
+                                                  .toString(),
+                                              textAlign: TextAlign.center,
+                                            ),
+                                          }
+                                        ],
+                                      )),
+                              Text(
+                                  myLista[index].maximoSensorAgua.toString() +
+                                      " CM",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(color: Colors.red)),
+                            ]),
+                          ],
                         ),
                         Container(
-                          width: width * 0.25,
-                          height: 120.0,
+                          width:double.infinity,alignment: Alignment.center,
                           color: Colors.blue,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Text("MIN"),
-                              Text(myLista[index]
-                                      .minimosensorTemperatura
-                                      .toString() +
-                                  " C"),
-                              Text(myLista[index].minSensorOxigeno.toString() +
-                                  "%"),
-                              Text(myLista[index].minimosensorPh.toString() +
-                                  " PH"),
-                              Text(myLista[index].minimoSensorAgua.toString() +
-                                  " CM"),
-                            ],
-                          ),
-                        ),
-                        Container(
-                            width: width * 0.25,
-                          height: 120.0,
-                          color: Colors.blue,
-                          child: GetBuilder<MySuperLago>(
-                              init: myLista[index],
-                              builder: (mySuperController) => Column(
-                                    children: [
-
-
-                                       Text("ACTUAL"),
-                                      if(myLista[index].actualSensorTemperatura ==0)...{
-                                        IconButton(
-                                        icon: Icon(Icons.add),
-                                        onPressed: () {
-                                          myLista[index].increment();
-                                        },
-                                      ),
-                                      }else...{
-                                      Text(myLista[index].actualSensorTemperatura.toString()),
-                                      Text(myLista[index].actualSensorOxigeno.toString()),
-                                      Text(myLista[index].actualSensorPh.toString()),
-                                      Text(myLista[index].actualSensorAgua.toString()),
-                                      }
-                                     
-
-                                    
-                                    ],
-                                  )),
-                        ),
-                        Container(
-                          width: width * 0.25,
-                          height: 120.0,
-                          color: Colors.red,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Text("MAX"),
-                              Text(myLista[index]
-                                      .maximosensorTemperatura
-                                      .toString() +
-                                  " C"),
-                              Text(myLista[index].maxSensorOxigeno.toString() +
-                                  "%"),
-                              Text(myLista[index].maximosensorPh.toString() +
-                                  " PH"),
-                              Text(myLista[index].maximoSensorAgua.toString() +
-                                  " CM"),
-                            ],
-                          ),
+                          child: Text("PECES DEL LAGO",style:TextStyle(color:Colors.white))),
+                        GridView.builder(
+                          shrinkWrap: true,
+                          itemCount: myLista[index].registrosLagos.length,
+                          gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 2),
+                          itemBuilder: (__, pos) {
+                            return ListTile(
+                              leading: Image.network(
+                                  myLista[index].registrosLagos[pos].pez.img,
+                                  height: 20.0),
+                              title: Text(
+                                myLista[index]
+                                    .registrosLagos[pos]
+                                    .pez
+                                    .nombrePez,
+                                style: TextStyle(fontSize: 10),
+                              ),
+                              subtitle: Column(
+                                children: [
+                                  Text(
+                                    "Cantidad de Peces:" +
+                                        myLista[index]
+                                            .registrosLagos[pos]
+                                            .cantidadPeces
+                                            .toString(),
+                                    style: TextStyle(fontSize: 10),
+                                  ),
+                                  //
+                                  Text(
+                                    "Fecha" +
+                                        formatter.format(DateTime.parse(
+                                            myLista[index]
+                                                .registrosLagos[pos]
+                                                .fecha
+                                                .toDate()
+                                                .toString())),
+                                    style: TextStyle(fontSize: 10),
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
                         )
                       ],
-                    )
-                  ],
-                );
+                    ));
               },
             );
           },
