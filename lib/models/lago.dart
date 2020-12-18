@@ -10,7 +10,7 @@ class Lago {
   String idLago;
   String nombreLago;
   DetailFishModel pez = new DetailFishModel();
-   List<DetailFishModel> myListaPeces;
+  List<DetailFishModel> myListaPeces;
   DateTime fecha;
   int cantidadPeces;
   SensorAgua sensorAgua;
@@ -39,9 +39,5 @@ class Lago {
       };
 
 
-  /*   Lago.fromSnapshot(DocumentSnapshot docs)
-      : idLago    = docs.documentID,
-        myListaPeces = List<DetailFishModel>.from(
-            docs["calificaciones"].map((x) => DetailFishModel.fromSnapshot(x))),
-        idUsuario   = docs['idUsuario']; */
+
 }

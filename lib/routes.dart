@@ -1,6 +1,7 @@
 import 'package:drawer_menu/pages/sensor/pages/edit_nivel_agua.dart';
 import 'package:flutter/material.dart';
 
+import 'pages/lakes/pages/detalle_lake.dart';
 import 'pages/login_page.dart';
 import 'pages/registro.dart';
 import 'pages/report.dart';
@@ -25,11 +26,17 @@ class Routes {
   static const String editSensorTemperatura = "EditSensorTemperatura";
 
   static const String editSensorPH = "EditSensorPH";
+   static const String editarLago = "EditarLago";
 
   //
   static Route<dynamic> generateRoute(RouteSettings settings) {
-    
     switch (settings.name) {
+      case editarLago:
+        return MyCustomRoute(
+          builder: (_) => DetalleSuperLago(
+            mylago: settings.arguments,
+          ),
+        );
 
       case editSensorPH:
         return MyCustomRoute(

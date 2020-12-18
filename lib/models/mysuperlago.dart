@@ -18,6 +18,7 @@ String mySuperLagoToMap(MySuperLago data) => json.encode(data.toMap());
 
 class MySuperLago extends GetxController {
   MySuperLago({
+    this.id,
     this.nombreLago,
     this.sensorAgua,
     this.minimoSensorAgua,
@@ -38,7 +39,7 @@ class MySuperLago extends GetxController {
     this.actualSensorAgua,
     this.actualSensorOxigeno,
   });
-
+  String id;
   String nombreLago;
   SensorAgua sensorAgua;
   SensorOxigeno sensorOxigeno;
@@ -53,7 +54,7 @@ class MySuperLago extends GetxController {
   int minimosensorTemperatura;
   int maximosensorTemperatura;
 
-  int actualSensorTemperatura =0;
+  int actualSensorTemperatura = 0;
   int actualSensorPh;
   int actualSensorAgua;
   int actualSensorOxigeno;
@@ -105,61 +106,92 @@ class MySuperLago extends GetxController {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Icon(Icons.assignment_turned_in, color: Colors.green, size: 25),
-
             if (actualSensorTemperatura > maximosensorTemperatura) ...{
               Icon(Icons.cloud, color: Colors.blue, size: 25),
-              Text("Sensor temperatura actual: " +actualSensorTemperatura.toString(),style: TextStyle(color: Colors.green),),
-              Text("  Temperatura Max sensor: " +maximosensorTemperatura.toString(),style: TextStyle(color: Colors.blue),
+              Text(
+                "Sensor temperatura actual: " +
+                    actualSensorTemperatura.toString(),
+                style: TextStyle(color: Colors.green),
+              ),
+              Text(
+                "  Temperatura Max sensor: " +
+                    maximosensorTemperatura.toString(),
+                style: TextStyle(color: Colors.blue),
               ),
             } else ...{
               Icon(Icons.device_thermostat, color: Colors.red, size: 25),
-              Text("Sensor temperatura actual: " +actualSensorTemperatura.toString(),style: TextStyle(color: Colors.green),
+              Text(
+                "Sensor temperatura actual: " +
+                    actualSensorTemperatura.toString(),
+                style: TextStyle(color: Colors.green),
               ),
               Text(
-                "  Temperatura Min sensor: " +minimosensorTemperatura.toString(),style: TextStyle(color: Colors.blue),
+                "  Temperatura Min sensor: " +
+                    minimosensorTemperatura.toString(),
+                style: TextStyle(color: Colors.blue),
               ),
             },
-
-
-              if (actualSensorAgua > maximoSensorAgua) ...{
+            if (actualSensorAgua > maximoSensorAgua) ...{
               Icon(Icons.cloud, color: Colors.blue, size: 25),
-              Text("Sensor Agua actual: " +actualSensorAgua.toString(),style: TextStyle(color: Colors.green),),
-              Text("  Temperatura Max sensor: " +maximoSensorAgua.toString(),style: TextStyle(color: Colors.blue),
+              Text(
+                "Sensor Agua actual: " + actualSensorAgua.toString(),
+                style: TextStyle(color: Colors.green),
+              ),
+              Text(
+                "  Temperatura Max sensor: " + maximoSensorAgua.toString(),
+                style: TextStyle(color: Colors.blue),
               ),
             } else ...{
               Icon(Icons.device_thermostat, color: Colors.red, size: 25),
-              Text("Sensor Agua actual: " +actualSensorAgua.toString(),style: TextStyle(color: Colors.green),
+              Text(
+                "Sensor Agua actual: " + actualSensorAgua.toString(),
+                style: TextStyle(color: Colors.green),
               ),
               Text(
-                "  Temperatura Min sensor: " +minimoSensorAgua.toString(),style: TextStyle(color: Colors.blue),
+                "  Temperatura Min sensor: " + minimoSensorAgua.toString(),
+                style: TextStyle(color: Colors.blue),
               ),
             },
-
-               if (actualSensorOxigeno > maxSensorOxigeno) ...{
+            if (actualSensorOxigeno > maxSensorOxigeno) ...{
               Icon(Icons.cloud, color: Colors.blue, size: 25),
-              Text("Sensor Oxigeno actual: " +actualSensorOxigeno.toString(),style: TextStyle(color: Colors.green),),
-              Text("  Temperatura Max sensor: " +maxSensorOxigeno.toString(),style: TextStyle(color: Colors.blue),
+              Text(
+                "Sensor Oxigeno actual: " + actualSensorOxigeno.toString(),
+                style: TextStyle(color: Colors.green),
+              ),
+              Text(
+                "  Temperatura Max sensor: " + maxSensorOxigeno.toString(),
+                style: TextStyle(color: Colors.blue),
               ),
             } else ...{
               Icon(Icons.device_thermostat, color: Colors.red, size: 25),
-              Text("Sensor Oxigeno actual: " +actualSensorOxigeno.toString(),style: TextStyle(color: Colors.green),
+              Text(
+                "Sensor Oxigeno actual: " + actualSensorOxigeno.toString(),
+                style: TextStyle(color: Colors.green),
               ),
               Text(
-                "  Temperatura Min sensor: " +minSensorOxigeno.toString(),style: TextStyle(color: Colors.blue),
+                "  Temperatura Min sensor: " + minSensorOxigeno.toString(),
+                style: TextStyle(color: Colors.blue),
               ),
             },
-
-              if (actualSensorPh > maxSensorOxigeno) ...{
+            if (actualSensorPh > maxSensorOxigeno) ...{
               Icon(Icons.cloud, color: Colors.blue, size: 25),
-              Text("Sensor PH actual: " +actualSensorPh.toString(),style: TextStyle(color: Colors.green),),
-              Text("  Temperatura Max sensor: " +maximosensorPh.toString(),style: TextStyle(color: Colors.blue),
+              Text(
+                "Sensor PH actual: " + actualSensorPh.toString(),
+                style: TextStyle(color: Colors.green),
+              ),
+              Text(
+                "  Temperatura Max sensor: " + maximosensorPh.toString(),
+                style: TextStyle(color: Colors.blue),
               ),
             } else ...{
               Icon(Icons.device_thermostat, color: Colors.red, size: 25),
-              Text("Sensor PH actual: " +actualSensorPh.toString(),style: TextStyle(color: Colors.green),
+              Text(
+                "Sensor PH actual: " + actualSensorPh.toString(),
+                style: TextStyle(color: Colors.green),
               ),
               Text(
-                "  Temperatura Min sensor: " +minimosensorPh.toString(),style: TextStyle(color: Colors.blue),
+                "  Temperatura Min sensor: " + minimosensorPh.toString(),
+                style: TextStyle(color: Colors.blue),
               ),
             },
           ],
@@ -179,6 +211,7 @@ class MySuperLago extends GetxController {
   }
 
   factory MySuperLago.fromMap(DocumentSnapshot json) => MySuperLago(
+        id       : json.documentID,
         nombreLago: json["nombre_lago"],
         sensorAgua: SensorAgua.fromMap(json["sensorAgua"]),
         sensorPh: SensorPH.fromMap(json["sensorPH"]),
@@ -265,7 +298,7 @@ class Pez {
   String nombreCientifico;
   String nombreEspecie;
   String continente;
-  EstiloVida estiloVida;
+  MiVida estiloVida;
   Detalle detalle;
   Mediciones mediciones;
   String descripcion;
@@ -276,7 +309,7 @@ class Pez {
         nombreCientifico: json["nombreCientifico"],
         nombreEspecie: json["nombreEspecie"],
         continente: json["continente"],
-        estiloVida: EstiloVida.fromMap(json["estiloVida"]),
+        estiloVida: MiVida.fromMap(json["estiloVida"]),
         detalle: Detalle.fromMap(json["detalle"]),
         mediciones: Mediciones.fromMap(json["mediciones"]),
         descripcion: json["descripcion"],
@@ -316,8 +349,8 @@ class Detalle {
       };
 }
 
-class EstiloVida {
-  EstiloVida({
+class MiVida {
+  MiVida({
     this.tempMin,
     this.tempMax,
     this.phMin,
@@ -329,7 +362,18 @@ class EstiloVida {
   int phMin;
   int phMax;
 
-  factory EstiloVida.fromMap(Map<String, dynamic> json) => EstiloVida(
+  MiVida.fromCreate(
+    int tempMin,
+    int tempMax,
+    int phMin,
+    int phMax,
+  )   : tempMin = tempMin,
+        tempMax = tempMax,
+        phMin = phMin,
+        phMax = phMax;
+  
+
+  factory MiVida.fromMap(Map<String, dynamic> json) => MiVida(
         tempMin: json["tempMin"],
         tempMax: json["tempMax"],
         phMin: json["phMin"],

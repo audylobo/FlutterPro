@@ -29,6 +29,29 @@ class FishListOrigin {
 }
 
 class DetailFishModel {
+  DetailFishModel.fromCreate(
+    String nombre,
+    String nombreCientifico,
+    String nombreEspecie,
+    String continente,
+    String descripcion,
+    String img,
+     MiEstiloVida estiloVida,
+       MiDetallePez detalle,
+       MisMediciones mediciones, 
+   /* 
+  
+    */
+  )   : nombrePez = nombre,
+        nombreCientifico = nombreCientifico,
+        nombreEspecie = nombreEspecie,
+        continente = continente,
+        descripcion = descripcion,
+        img = img,
+        estiloVida = estiloVida,
+          detalle = detalle,
+           mediciones = mediciones; 
+  
   DetailFishModel({
     this.nombrePez,
     this.nombreCientifico,
@@ -47,25 +70,24 @@ class DetailFishModel {
   String continente;
   String descripcion;
   String img;
-  EstiloVida estiloVida;
-  Detalle detalle;
-  Mediciones mediciones;
+  MiEstiloVida estiloVida;
+  MiDetallePez detalle;
+  MisMediciones mediciones;
 /*    FishListOrigin.fromSnapshot(DocumentSnapshot docs)
       : categoria = docs.documentID,
         description = docs['description'],
         img = docs['img'];
  */
-   DetailFishModel.fromSnapshot(DocumentSnapshot docs) :
-        nombrePez       = docs["nombrePez"],
-        nombreCientifico= docs["nombreCientifico"],
-        nombreEspecie   = docs["nombreEspecie"],
-        continente      = docs["continente"],
-        descripcion     = docs["descripcion"],
-        img             = docs["img"],
-        estiloVida      = EstiloVida.fromMap( docs["estiloVida"]),
-        detalle         = Detalle.fromMap(    docs["detalle"]),
-        mediciones      = Mediciones.fromMap( docs["mediciones"]);
-    
+  DetailFishModel.fromSnapshot(DocumentSnapshot docs)
+      : nombrePez = docs["nombrePez"],
+        nombreCientifico = docs["nombreCientifico"],
+        nombreEspecie = docs["nombreEspecie"],
+        continente = docs["continente"],
+        descripcion = docs["descripcion"],
+        img = docs["img"],
+        estiloVida = MiEstiloVida.fromMap(docs["estiloVida"]),
+        detalle = MiDetallePez.fromMap(docs["detalle"]),
+        mediciones = MisMediciones.fromMap(docs["mediciones"]);
 
   Map<String, dynamic> toMap() => {
         "nombrePez": nombrePez,
@@ -79,14 +101,15 @@ class DetailFishModel {
         "mediciones": mediciones.toMap(),
       };
 
-  DetailFishModel detailFishModelFromMap(String str) => DetailFishModel.fromSnapshot(json.decode(str));
+  DetailFishModel detailFishModelFromMap(String str) =>
+      DetailFishModel.fromSnapshot(json.decode(str));
 
   String detailFishModelToMap(DetailFishModel data) =>
       json.encode(data.toMap());
 }
 
-class Detalle {
-  Detalle({
+class MiDetallePez {
+  MiDetallePez({
     this.pesoMax,
     this.edadMax,
   });
@@ -94,7 +117,14 @@ class Detalle {
   int pesoMax;
   int edadMax;
 
-  factory Detalle.fromMap(Map<String, dynamic> json) => Detalle(
+     MiDetallePez.fromCreate(
+int pesoMax,
+int edadMax,
+  
+  )   : pesoMax = pesoMax,
+        edadMax = edadMax;
+
+  factory MiDetallePez.fromMap(Map<String, dynamic> json) => MiDetallePez(
         pesoMax: json["pesoMax"],
         edadMax: json["edadMax"],
       );
@@ -105,8 +135,8 @@ class Detalle {
       };
 }
 
-class EstiloVida {
-  EstiloVida({
+class MiEstiloVida {
+  MiEstiloVida({
     this.tempMin,
     this.tempMax,
     this.phMax,
@@ -117,8 +147,17 @@ class EstiloVida {
   int tempMax;
   int phMax;
   int phMin;
+    MiEstiloVida.fromCreate(
+    int tempMin,
+    int tempMax,
+    int phMin,
+    int phMax,
+  )   : tempMin = tempMin,
+        tempMax = tempMax,
+        phMin = phMin,
+        phMax = phMax;
 
-  factory EstiloVida.fromMap(Map<String, dynamic> json) => EstiloVida(
+  factory MiEstiloVida.fromMap(Map<String, dynamic> json) => MiEstiloVida(
         tempMin: json["tempMin"],
         tempMax: json["tempMax"],
         phMax: json["phMax"],
@@ -133,8 +172,8 @@ class EstiloVida {
       };
 }
 
-class Mediciones {
-  Mediciones({
+class MisMediciones {
+  MisMediciones({
     this.tamanoMin,
     this.tamanoMax,
   });
@@ -142,7 +181,14 @@ class Mediciones {
   int tamanoMin;
   int tamanoMax;
 
-  factory Mediciones.fromMap(Map<String, dynamic> json) => Mediciones(
+  MisMediciones.fromCreate(
+    int tamanoMin,
+    int tamanoMax,
+   
+  )   : tamanoMin = tamanoMin,
+        tamanoMax = tamanoMax;
+
+  factory MisMediciones.fromMap(Map<String, dynamic> json) => MisMediciones(
         tamanoMin: json["tamanoMin"],
         tamanoMax: json["tamanoMax"],
       );

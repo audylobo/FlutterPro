@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:drawer_menu/models/mysuperlago.dart';
 import 'package:drawer_menu/pages/lakes/pages/add_lake.dart';
+import 'package:drawer_menu/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
@@ -53,13 +54,33 @@ class _LagosState extends State<Lagos> {
               shrinkWrap: true,
               itemBuilder: (_, index) {
                 return ListTile(
-
                     leading: Icon(FontAwesomeIcons.water,
-                        color: Colors.blue, size: 50.0),
+                        color: Colors.blue, size: 35.0),
+                    trailing: PopupMenuButton(
+                        itemBuilder: (_) => <PopupMenuItem<String>>[
+                              new PopupMenuItem<String>(
+                                  child: const Text('Editar'), value: 'edit'),
+                              new PopupMenuItem<String>(
+                                  child: const Text('Eliminar'),
+                                  value: 'delete'),
+                            ],
+                        onSelected: (value) {
+                          switch (value) {
+                            case 'edit':
+                                Navigator.pushNamed(context, Routes.editarLago,arguments: myLista[index]);
+                              break;
+                            case 'delete':
+                              break;
+                            default:
+                          }
+                        }),
                     subtitle: Column(
                       children: [
+                        SizedBox(
+                          height: 15.0,
+                        ),
                         Table(
-                          defaultColumnWidth: FixedColumnWidth(80.0),
+                          defaultColumnWidth: FixedColumnWidth(70.0),
                           children: [
                             TableRow(children: [
                               Text('Lago ' + (index + 1).toString(),
@@ -100,7 +121,9 @@ class _LagosState extends State<Lagos> {
                                               },
                                               child: Icon(Icons.add),
                                             ),
-                                          } else ...{
+                                          } else if (myLista[index]
+                                                  .actualSensorTemperatura !=
+                                              0) ...{
                                             Text(
                                               myLista[index]
                                                   .actualSensorTemperatura
@@ -133,7 +156,9 @@ class _LagosState extends State<Lagos> {
                                                   .actualSensorTemperatura ==
                                               0)
                                             ...{}
-                                          else ...{
+                                          else if (myLista[index]
+                                                  .actualSensorTemperatura !=
+                                              0) ...{
                                             Text(
                                               myLista[index]
                                                   .actualSensorOxigeno
@@ -164,7 +189,9 @@ class _LagosState extends State<Lagos> {
                                                   .actualSensorTemperatura ==
                                               0)
                                             ...{}
-                                          else ...{
+                                          else if (myLista[index]
+                                                  .actualSensorTemperatura !=
+                                              0) ...{
                                             Text(
                                               myLista[index]
                                                   .actualSensorPh
@@ -195,7 +222,9 @@ class _LagosState extends State<Lagos> {
                                                   .actualSensorTemperatura ==
                                               0)
                                             ...{}
-                                          else ...{
+                                          else if (myLista[index]
+                                                  .actualSensorTemperatura !=
+                                              0) ...{
                                             Text(
                                               myLista[index]
                                                   .actualSensorAgua
@@ -214,9 +243,11 @@ class _LagosState extends State<Lagos> {
                           ],
                         ),
                         Container(
-                          width:double.infinity,alignment: Alignment.center,
-                          color: Colors.blue,
-                          child: Text("PECES DEL LAGO",style:TextStyle(color:Colors.white))),
+                            width: double.infinity,
+                            alignment: Alignment.center,
+                            color: Colors.blue,
+                            child: Text("PECES DEL LAGO",
+                                style: TextStyle(color: Colors.white))),
                         GridView.builder(
                           shrinkWrap: true,
                           itemCount: myLista[index].registrosLagos.length,
@@ -224,39 +255,41 @@ class _LagosState extends State<Lagos> {
                               SliverGridDelegateWithFixedCrossAxisCount(
                                   crossAxisCount: 2),
                           itemBuilder: (__, pos) {
-                            return ListTile(
-                              leading: Image.network(
-                                  myLista[index].registrosLagos[pos].pez.img,
-                                  height: 20.0),
-                              title: Text(
-                                myLista[index]
-                                    .registrosLagos[pos]
-                                    .pez
-                                    .nombrePez,
-                                style: TextStyle(fontSize: 10),
-                              ),
-                              subtitle: Column(
-                                children: [
-                                  Text(
-                                    "Cantidad de Peces:" +
-                                        myLista[index]
-                                            .registrosLagos[pos]
-                                            .cantidadPeces
-                                            .toString(),
-                                    style: TextStyle(fontSize: 10),
-                                  ),
-                                  //
-                                  Text(
-                                    "Fecha" +
-                                        formatter.format(DateTime.parse(
-                                            myLista[index]
-                                                .registrosLagos[pos]
-                                                .fecha
-                                                .toDate()
-                                                .toString())),
-                                    style: TextStyle(fontSize: 10),
-                                  ),
-                                ],
+                            return SingleChildScrollView(
+                              child: ListTile(
+                                leading: Image.network(
+                                    myLista[index].registrosLagos[pos].pez.img,
+                                    height: 20.0),
+                                title: Text(
+                                  myLista[index]
+                                      .registrosLagos[pos]
+                                      .pez
+                                      .nombrePez,
+                                  style: TextStyle(fontSize: 10),
+                                ),
+                                subtitle: Column(
+                                  children: [
+                                    Text(
+                                      "Cantidad de Peces:" +
+                                          myLista[index]
+                                              .registrosLagos[pos]
+                                              .cantidadPeces
+                                              .toString(),
+                                      style: TextStyle(fontSize: 10),
+                                    ),
+                                    //
+                                    Text(
+                                      "Fecha de Ingreso: " +
+                                          formatter.format(DateTime.parse(
+                                              myLista[index]
+                                                  .registrosLagos[pos]
+                                                  .fecha
+                                                  .toDate()
+                                                  .toString())),
+                                      style: TextStyle(fontSize: 10),
+                                    ),
+                                  ],
+                                ),
                               ),
                             );
                           },

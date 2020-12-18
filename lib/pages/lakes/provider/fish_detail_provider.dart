@@ -13,6 +13,7 @@ class FishDetailProvider with ChangeNotifier {
 
     notifyListeners();
   }
+  
 }
 
 
