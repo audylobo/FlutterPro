@@ -122,7 +122,7 @@ class ControllerAddFishListLake {
           "actualSensorAgua": 0,
           "actualSensorOxigeno": 0,
         }).then((value) {
-          toast.show("Sensor de agua editado", Colors.blue[900], Colors.white);
+          toast.show("Lago Editado", Colors.blue[900], Colors.white);
           //provider.resetData();
           // Navigator.pushNamed(context, Routes.bibliotecarioHome);
         });

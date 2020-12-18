@@ -67,9 +67,18 @@ class _LagosState extends State<Lagos> {
                         onSelected: (value) {
                           switch (value) {
                             case 'edit':
-                                Navigator.pushNamed(context, Routes.editarLago,arguments: myLista[index]);
+                              Navigator.pushNamed(context, Routes.editarLago,
+                                  arguments: myLista[index]);
                               break;
                             case 'delete':
+                              Firestore.instance
+                                  .collection("lagos")
+                                  .document(myLista[index].id)
+                                  .delete()
+                                  .then((value) {
+                                //provider.resetData();
+                                // Navigator.pushNamed(context, Routes.bibliotecarioHome);
+                              });
                               break;
                             default:
                           }
