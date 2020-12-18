@@ -38,6 +38,7 @@ dependencies:
   get: ^3.23.1  
   fluttertoast: ^7.0.4
   cached_network_image: ^2.4.1
+  syncfusion_flutter_pdf: ^18.4.30-beta
 
 
 dev_dependencies:

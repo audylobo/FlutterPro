@@ -17,28 +17,7 @@ MySuperLago mySuperLagoFromMap(String str) =>
 String mySuperLagoToMap(MySuperLago data) => json.encode(data.toMap());
 
 class MySuperLago extends GetxController {
-  MySuperLago({
-    this.id,
-    this.nombreLago,
-    this.sensorAgua,
-    this.minimoSensorAgua,
-    this.maximoSensorAgua,
-    this.minSensorOxigeno,
-    this.maxSensorOxigeno,
-    this.minimosensorPh,
-    this.maximosensorPh,
-    this.minimosensorTemperatura,
-    this.maximosensorTemperatura,
-    this.registrosLagos,
-    this.sensorOxigeno,
-    this.sensorPh,
-    this.sensorTemperatura,
-    this.prueba,
-    this.actualSensorTemperatura,
-    this.actualSensorPh,
-    this.actualSensorAgua,
-    this.actualSensorOxigeno,
-  });
+ 
   String id;
   String nombreLago;
   SensorAgua sensorAgua;
@@ -63,6 +42,29 @@ class MySuperLago extends GetxController {
   List<RegistrosLago> registrosLagos;
 
   int randomNumber;
+
+   MySuperLago({
+    this.id,
+    this.nombreLago,
+    this.sensorAgua,
+    this.minimoSensorAgua,
+    this.maximoSensorAgua,
+    this.minSensorOxigeno,
+    this.maxSensorOxigeno,
+    this.minimosensorPh,
+    this.maximosensorPh,
+    this.minimosensorTemperatura,
+    this.maximosensorTemperatura,
+    this.registrosLagos,
+    this.sensorOxigeno,
+    this.sensorPh,
+    this.sensorTemperatura,
+    this.prueba,
+    this.actualSensorTemperatura,
+    this.actualSensorPh,
+    this.actualSensorAgua,
+    this.actualSensorOxigeno,
+  });
 
   Future<void> increment() async {
     Timer.periodic(Duration(seconds: 3), (timer) {
