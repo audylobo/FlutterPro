@@ -103,11 +103,13 @@ class _FishPrincipalState extends State<FishPrincipal>
     
     final user = Provider.of<User>(context);    
 
-    if (userRol == null) {
+    if (userRol == null ) {
       DatabaseService(user.uid).getUserData().then((document) {
+        user.userActual = User.fromSnapshot(document);
         setState(() {
           userRol = document.data['rol'].toString();
         });
+       
       });
     }
 
@@ -123,19 +125,17 @@ class _FishPrincipalState extends State<FishPrincipal>
               },
             ),
           ],
-          bottom: userRol != 'usuario'
-              ? new TabBar(controller: _tabController, tabs: <Widget>[
+          bottom: new TabBar(controller: _tabController, tabs: <Widget>[
                   new Tab(icon: new Icon(FontAwesomeIcons.tint), text: 'Lagos',),
                   new Tab(icon: new Icon(FontAwesomeIcons.fish), text: 'Peces',),
                   new Tab(icon: new Icon(Icons.speaker_phone), text: 'Sensores',),
                   new Tab(icon: new Icon(Icons.settings), text: 'Configuración',)
                 ])
-              : null,
+              
         ),
        
         drawer: _getDrawer(context, user),
-        body: userRol != 'usuario'
-            ? new TabBarView(controller: _tabController, children: <Widget>[
+        body: new TabBarView(controller: _tabController, children: <Widget>[
                 new Lagos(),
                 new Fishp(
                   userRol: userRol,
@@ -143,7 +143,7 @@ class _FishPrincipalState extends State<FishPrincipal>
                 new Sensor(),
                 new Settings(),
               ])
-            : Fishp());
+            );
   }
 
 }

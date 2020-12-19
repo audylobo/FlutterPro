@@ -4,6 +4,9 @@ import 'package:flutter/material.dart';
 
 import '../../../routes.dart';
 
+import 'package:provider/provider.dart';
+import 'package:drawer_menu/models/user_model.dart';
+
 class ListSensorAgua extends StatelessWidget {
   final List<SensorAgua> array;
 
@@ -12,6 +15,7 @@ class ListSensorAgua extends StatelessWidget {
   });
   @override
   Widget build(BuildContext context) {
+     final user = Provider.of<User>(context, listen: false);
     return Container(
       height: 400,
       child: ListView.builder(
@@ -20,7 +24,10 @@ class ListSensorAgua extends StatelessWidget {
         itemBuilder: (context, index) {
           return ListTile(
             onTap: () {
-              Navigator.pushNamed(context, Routes.editEditNivelAgua,arguments: array[index]);
+               if (user.userActual.rol == "admin") {
+               Navigator.pushNamed(context, Routes.editEditNivelAgua,arguments: array[index]);
+              }
+             
             },
             leading: index % 2 == 0
                 ? Icon(Icons.report)

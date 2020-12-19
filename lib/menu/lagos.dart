@@ -11,8 +11,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import '../pages/lakes/pages/add_lake.dart';
-import 'provider/lake_provider.dart';
+import 'package:drawer_menu/models/user_model.dart';
 
 class Lagos extends StatefulWidget {
   static const String routeName = "/lagos";
@@ -26,13 +25,18 @@ class _LagosState extends State<Lagos> {
 
   @override
   Widget build(BuildContext context) {
+    final user = Provider.of<User>(context, listen: false);
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-          child: Icon(Icons.add),
-          onPressed: () {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => AddLagePageCreate()));
-          }),
+      floatingActionButton: user.userActual.rol == "admin"
+          ? FloatingActionButton(
+              child: Icon(Icons.add),
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => AddLagePageCreate()));
+              })
+          : Container(),
       body: Container(
         height: double.infinity,
         width: double.infinity,
@@ -74,23 +78,29 @@ class _LagosState extends State<Lagos> {
                           onSelected: (value) {
                             switch (value) {
                               case 'edit':
-                                Navigator.pushNamed(context, Routes.editarLago,
-                                    arguments: myLista[index]);
+                                if (user.userActual.rol == "admin") {
+                                  Navigator.pushNamed(
+                                      context, Routes.editarLago,
+                                      arguments: myLista[index]);
+                                }
+
                                 break;
                               case 'delete':
-                                Firestore.instance
-                                    .collection("lagos")
-                                    .document(myLista[index].id)
-                                    .delete()
-                                    .then((value) {
-                                  //provider.resetData();
-                                  // Navigator.pushNamed(context, Routes.bibliotecarioHome);
-                                });
+                                if (user.userActual.rol == "admin") {
+                                  Firestore.instance
+                                      .collection("lagos")
+                                      .document(myLista[index].id)
+                                      .delete()
+                                      .then((value) {});
+                                }
+
                                 break;
 
                               case "reporte":
-                                //
-                                generateDocument(myLista[index]);
+                                if(user.userActual.rol == "admin" || user.userActual.rol == "trabajador"){
+                                  generateDocument(myLista[index]);
+                                }
+                                
                                 break;
                               default:
                                 break;

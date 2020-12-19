@@ -8,10 +8,20 @@ import 'package:drawer_menu/models/sensores/ph.dart';
 import 'package:drawer_menu/models/sensores/temperatura.dart';
 
 import '../../models/fish.dart';
+import 'package:drawer_menu/models/user_model.dart';
 
 class StreamSensorTemperatura {
+  Future<List<User>> getAllUser() async {
+    QuerySnapshot querySnapShot =
+        await Firestore.instance.collection('users').getDocuments();
 
-    Future<List<FishListOrigin>> getCategoriaPeces() async {
+    List<User> array =
+        querySnapShot.documents.map((doc) => User.fromSnapshot(doc)).toList();
+
+    return array;
+  }
+
+  Future<List<FishListOrigin>> getCategoriaPeces() async {
     QuerySnapshot querySnapShot =
         await Firestore.instance.collection('fish').getDocuments();
 
@@ -22,7 +32,6 @@ class StreamSensorTemperatura {
 
     return array;
   }
-
 
   Future<List<SensorTemperatura>> getSensoresTemperatura() async {
     QuerySnapshot querySnapShot = await Firestore.instance
@@ -61,8 +70,7 @@ class StreamSensorTemperatura {
     return array;
   }
 
-
-    Future<List<SensorAgua>> getSensorAgua() async {
+  Future<List<SensorAgua>> getSensorAgua() async {
     QuerySnapshot querySnapShot =
         await Firestore.instance.collection('sensor agua').getDocuments();
 
@@ -73,6 +81,4 @@ class StreamSensorTemperatura {
 
     return array;
   }
-
-
 }

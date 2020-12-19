@@ -11,7 +11,7 @@ import 'package:drawer_menu/services/streams/stream_sensor_temperatura.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
-
+import 'package:drawer_menu/models/user_model.dart';
 
 // ignore: must_be_immutable
 class Sensor extends StatelessWidget {
@@ -25,6 +25,7 @@ class Sensor extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<Person>(context,listen: true);
+    final user = Provider.of<User>(context, listen: false);
     return Consumer<Person>(
       builder: (context, person, child) {
         return Scaffold(
@@ -52,12 +53,15 @@ class Sensor extends StatelessWidget {
             currentIndex: person.age,
             onTap: person.increaseAge,
           ),
-          floatingActionButton: FloatingActionButton(
+          floatingActionButton: 
+          user.userActual.rol == "admin" ? 
+          FloatingActionButton(
             onPressed: () {
               Navigator.pushNamed(context, Routes.crearSensor);
             },
             child: Icon(Icons.add),
-          ),
+          ): Container(),
+          
         );
       },
       child: [
