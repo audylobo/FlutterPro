@@ -90,7 +90,7 @@ class _FishPrincipalState extends State<FishPrincipal>
   TabController _tabController;
 
   var userRol;
-  
+
   @override
   void initState() {
     super.initState();
@@ -100,21 +100,12 @@ class _FishPrincipalState extends State<FishPrincipal>
 
   @override
   Widget build(BuildContext context) {
-    
-    final user = Provider.of<User>(context);    
+    final user = Provider.of<User>(context);
 
-    if (userRol == null ) {
-      DatabaseService(user.uid).getUserData().then((document) {
-        user.userActual = User.fromSnapshot(document);
-        setState(() {
-          userRol = document.data['rol'].toString();
-        });
-       
-      });
-    }
+ 
 
     return new Scaffold(
-        appBar: new AppBar(
+      appBar: new AppBar(
           title: Text('Fish life'),
           actions: <Widget>[
             IconButton(
@@ -126,24 +117,45 @@ class _FishPrincipalState extends State<FishPrincipal>
             ),
           ],
           bottom: new TabBar(controller: _tabController, tabs: <Widget>[
-                  new Tab(icon: new Icon(FontAwesomeIcons.tint), text: 'Lagos',),
-                  new Tab(icon: new Icon(FontAwesomeIcons.fish), text: 'Peces',),
-                  new Tab(icon: new Icon(Icons.speaker_phone), text: 'Sensores',),
-                  new Tab(icon: new Icon(Icons.settings), text: 'Configuración',)
-                ])
-              
-        ),
-       
-        drawer: _getDrawer(context, user),
-        body: new TabBarView(controller: _tabController, children: <Widget>[
-                new Lagos(),
-                new Fishp(
-                  userRol: userRol,
-                ),
-                new Sensor(),
-                new Settings(),
-              ])
+            new Tab(
+              icon: new Icon(FontAwesomeIcons.tint),
+              text: 'Lagos',
+            ),
+            new Tab(
+              icon: new Icon(FontAwesomeIcons.fish),
+              text: 'Peces',
+            ),
+            new Tab(
+              icon: new Icon(Icons.speaker_phone),
+              text: 'Sensores',
+            ),
+            new Tab(
+              icon: new Icon(Icons.settings),
+              text: 'Configuración',
+            )
+          ])),
+      drawer: _getDrawer(context, user),
+      body: FutureBuilder(
+        future: DatabaseService(user.uid).getUserData(),
+        builder: (BuildContext context, AsyncSnapshot snapshot) {
+          if (snapshot.hasError || !snapshot.hasData) {
+            return Center(
+              child: CircularProgressIndicator(),
             );
-  }
+          }
 
+            user.userActual = User.fromSnapshot(snapshot.data);
+           userRol = snapshot.data['rol'].toString();
+          return TabBarView(controller: _tabController, children: <Widget>[
+            new Lagos(),
+            new Fishp(
+              userRol: userRol,
+            ),
+            new Sensor(),
+            new Settings(),
+          ]);
+        },
+      ),
+    );
+  }
 }
