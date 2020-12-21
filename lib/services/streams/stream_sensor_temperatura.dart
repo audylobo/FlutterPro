@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:drawer_menu/models/reporte.dart';
 import 'package:drawer_menu/models/sensores/agua.dart';
 import 'package:drawer_menu/models/sensores/oxigeno.dart';
 import 'package:drawer_menu/models/sensores/ph.dart';
@@ -27,6 +28,18 @@ class StreamSensorTemperatura {
 
     List<FishListOrigin> array = querySnapShot.documents
         .map((doc) => FishListOrigin.fromSnapshot(doc))
+        .toList();
+    print(array);
+
+    return array;
+  }
+
+  Future<List<Reporte>> getReportes() async {
+    QuerySnapshot querySnapShot =
+        await Firestore.instance.collection('reports').getDocuments();
+
+    List<Reporte> array = querySnapShot.documents
+        .map((doc) => Reporte.fromSnapshot(doc))
         .toList();
     print(array);
 

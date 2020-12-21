@@ -1,7 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:drawer_menu/models/mysuperlago.dart';
+import 'package:drawer_menu/models/reporte.dart';
 import 'package:drawer_menu/models/user_model.dart';
-import 'package:drawer_menu/services/database_service.dart';
+import 'package:drawer_menu/services/streams/stream_sensor_temperatura.dart';
+import 'package:drawer_menu/src/misuper_pdf.dart';
 import 'package:drawer_menu/src/pdf.dart';
+import 'package:drawer_menu/services/database_service.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:intl/intl.dart';
@@ -13,11 +18,11 @@ class Report extends StatefulWidget {
 }
 
 class _ReportState extends State<Report> {
-  bool isLoading = false;
+  final myFuture = new StreamSensorTemperatura();
 
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<User>(context);
+    //final user = Provider.of<User>(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -26,51 +31,6 @@ class _ReportState extends State<Report> {
       backgroundColor: Colors.grey[200],
       body: Column(
         children: <Widget>[
-          SizedBox(
-            height: 20.0,
-          ),
-          Center(
-            child: RaisedButton(
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: isLoading
-                      ? <Widget>[
-                          SpinKitCircle(size: 30.0, color: Colors.white),
-                          SizedBox(
-                            width: 10.0,
-                          ),
-                          Text(
-                            'Creando reporte ...',
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        ]
-                      : <Widget>[
-                          Icon(
-                            Icons.insert_chart,
-                            color: Colors.white,
-                          ),
-                          SizedBox(
-                            width: 10.0,
-                          ),
-                          Text(
-                            'Generar nuevo reporte',
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        ],
-                ),
-                color: Colors.blue,
-                onPressed: () {
-                  if (!isLoading) {
-                    isLoading = true;
-                    DatabaseService(null)
-                        .createNewReport(user.name)
-                        .then((value) {
-                          isLoading = false;
-                          (context as Element).reassemble();
-                    });
-                  }
-                }),
-          ),
           SizedBox(height: 20.0),
           Expanded(
             child: ClipRRect(
@@ -79,35 +39,38 @@ class _ReportState extends State<Report> {
                 width: double.infinity,
                 height: 50.0,
                 color: Colors.white,
-                child: FutureBuilder(
-                  future: DatabaseService(null).getReportList(),
-                  initialData: List<DocumentSnapshot>(),
+                child: FutureBuilder<List<Reporte>>(
+                  future: myFuture.getReportes(),
                   builder: (BuildContext context,
-                      AsyncSnapshot<List<DocumentSnapshot>> snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      AsyncSnapshot<List<Reporte>> snapshot) {
+                    if (snapshot.hasError || !snapshot.hasData) {
                       return Center(
-                          child: SpinKitCircle(
-                        color: Colors.blue,
-                      ));
-                    } else if (snapshot.hasData) {
-                      return ListView.builder(
-                        itemCount: snapshot.data.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          return reportItem(snapshot.data[index]);
-                        },
-                      );
-                    } else {
-                      return Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Icon(
-                            Icons.insert_chart,
-                            color: Colors.blue,
-                          ),
-                          Text('No se encontraron reportes generados'),
-                        ],
+                        child: CircularProgressIndicator(),
                       );
                     }
+                    List<Reporte> arrayList = snapshot.data;
+
+                    return ListView.builder(
+                      itemCount: arrayList.length,
+                      shrinkWrap: true,
+                      itemBuilder: (_, index) {
+                        return ListTile(
+                          leading: Icon(Icons.picture_as_pdf),
+                          title: Text(arrayList[index].email),
+                          trailing: Icon(Icons.perm_device_info),
+                          onTap: () async {
+                            var query = await Firestore.instance
+                                .collection('lagos')
+                                .document(arrayList[index].idLago)
+                                .get();
+
+                            final lago = MySuperLago.fromDocument(query.data);
+
+                            generateDocument(lago);
+                          },
+                        );
+                      },
+                    );
                   },
                 ),
               ),

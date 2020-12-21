@@ -31,7 +31,8 @@ class User with ChangeNotifier {
 
   User.fromSnapshot(DocumentSnapshot docs)
       : uid = docs.documentID,
-        name = docs['name'],
+      
+        name = docs['name']== null ? "nombre" : docs["name"] ,
         email = docs['email'],
         rol = docs['rol'],
         picture = docs['picture'];

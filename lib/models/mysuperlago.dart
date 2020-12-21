@@ -235,6 +235,32 @@ class MySuperLago extends GetxController {
             json["registros_lagos"].map((x) => RegistrosLago.fromMap(x))),
       );
 
+
+        factory MySuperLago.fromDocument(Map<String,dynamic> json) => MySuperLago(
+
+        
+        nombreLago: json["nombre_lago"],
+        sensorAgua: SensorAgua.fromMap(json["sensorAgua"]),
+        sensorPh: SensorPH.fromMap(json["sensorPH"]),
+        sensorOxigeno: SensorOxigeno.fromMap(json["sensorOxigeno"]),
+        sensorTemperatura: SensorTemperatura.fromMap(json["sensorTemperatura"]),
+        actualSensorTemperatura: json["actualSensorTemperatura"],
+        actualSensorPh: json["actualSensorPh"],
+        actualSensorAgua: json["actualSensorAgua"],
+        actualSensorOxigeno: json["actualSensorOxigeno"],
+        minimoSensorAgua: json["minimoSensorAgua"],
+        maximoSensorAgua: json["maximoSensorAgua"],
+        minSensorOxigeno: json["minSensorOxigeno"],
+        maxSensorOxigeno: json["maxSensorOxigeno"],
+        minimosensorPh: json["minimosensorPH"],
+        maximosensorPh: json["maximosensorPH"],
+        minimosensorTemperatura: json["minimosensorTemperatura"],
+        maximosensorTemperatura: json["maximosensorTemperatura"],
+        registrosLagos: List<RegistrosLago>.from(
+            json["registros_lagos"].map((x) => RegistrosLago.fromMap(x))),
+      );
+
+
   Map<String, dynamic> toMap() => {
         "nombre_lago": nombreLago,
         "sensorAgua": sensorAgua.toMap(),

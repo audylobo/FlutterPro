@@ -79,7 +79,7 @@ class _FishPrincipalState extends State<FishPrincipal>
     return Drawer(
         child: ListView(children: <Widget>[
       header,
-      _getItem(new Icon(FontAwesomeIcons.bars), 'Reporte', "reportes"),
+      _getItem(new Icon(FontAwesomeIcons.bars), 'Reporte', "reportes"), 
       _getItem(new Icon(Icons.live_help), 'Ayuda', "/ayuda"),
       Divider(),
       _getItem(new Icon(Icons.exit_to_app), 'Cerrar sesión', "cerrar"),
@@ -101,8 +101,6 @@ class _FishPrincipalState extends State<FishPrincipal>
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<User>(context);
-
- 
 
     return new Scaffold(
       appBar: new AppBar(
@@ -144,14 +142,18 @@ class _FishPrincipalState extends State<FishPrincipal>
             );
           }
 
-            user.userActual = User.fromSnapshot(snapshot.data);
-           userRol = snapshot.data['rol'].toString();
+          user.userActual = User.fromSnapshot(snapshot.data);
+          userRol = snapshot.data['rol'].toString();
           return TabBarView(controller: _tabController, children: <Widget>[
             new Lagos(),
             new Fishp(
               userRol: userRol,
             ),
-            new Sensor(),
+            if (user.userActual.rol == "usuario") ...{
+              Container(),
+            } else ...{
+              new Sensor(),
+            },
             new Settings(),
           ]);
         },
